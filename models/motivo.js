@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var Motivo = new Schema({
+const Motivo = new mongoose.Schema({
     motivo: { type: String, required: true },
     data: {    type: Date, default: Date.now }
 });

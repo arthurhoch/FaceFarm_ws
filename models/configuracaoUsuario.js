@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var ConfiguracaoUsuario = new Schema({
+const ConfiguracaoUsuario = new mongoose.Schema({
     visualizarPrevisaoTempo: { type: Boolean, required: true },
     visualizarCotacaoMoeda: { type: Boolean, required: true },
     visualizarComodities: { type: Boolean, required: true }

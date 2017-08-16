@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var Postagem = new Schema({
+const Postagem = new mongoose.Schema({
     texto: { type: String, required: true },
     curtidas: { type: Number },
     data: {    type: Date, default: Date.now },
@@ -8,9 +9,9 @@ var Postagem = new Schema({
     quantidadeTotal: { type: Number },
     quantidadeMedida: { type: Number },
     unidadeMedida: { type: Number },
-    listaComentario: [Schema.Types.ObjectId],
-    listaCultura: [Schema.Types.ObjectId],
-    listaImagen: [Schema.Types.ObjectId]
+    listaComentario: [mongoose.Schema.ObjectId],
+    listaCultura: [mongoose.Schema.ObjectId],
+    listaImagen: [mongoose.Schema.ObjectId]
 });
 
 module.exports = { Postagem }

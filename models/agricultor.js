@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var Agricultor = new Schema({
+const Agricultor = new mongoose.Schema({
     login: { type: String, required: true, unique: true, lowercase: true, trim: true },
     senha: { type: String, required: true, min: 8 },
     nomeCompleto: { type: String, required: true, lowercase: true, trim: true, min: 6 },
@@ -17,17 +18,17 @@ var Agricultor = new Schema({
     dataCriacaoConta: {    type: Date, default: Date.now },
     dataNascrimento: { type: Date, default: Date.now },
     hashConfirmacao: { type: String},
-    configuracao: Schema.Types.ObjectId,
-    listaDenunciaUsuario: [Schema.Types.ObjectId],
-    listaDenunciaAnuncio: [Schema.Types.ObjectId],
-    listaCultura: [Schema.Types.ObjectId],
-    listaPostage: [Schema.Types.ObjectId],
-    listaComentarios: [Schema.Types.ObjectId],
-    listaImagen: [Schema.Types.ObjectId],
-    listaFerramenta: [Schema.Types.ObjectId],
-    listaCidade: [Schema.Types.ObjectId],
-    listaBanimento: [Schema.Types.ObjectId],
-    listaNotificacao: [Schema.Types.ObjectId]
+    configuracao: mongoose.Schema.ObjectId,
+    listaDenunciaUsuario: [mongoose.Schema.ObjectId],
+    listaDenunciaAnuncio: [mongoose.Schema.ObjectId],
+    listaCultura: [mongoose.Schema.ObjectId],
+    listaPostage: [mongoose.Schema.ObjectId],
+    listaComentarios: [mongoose.Schema.ObjectId],
+    listaImagen: [mongoose.Schema.ObjectId],
+    listaFerramenta: [mongoose.Schema.ObjectId],
+    listaCidade: [mongoose.Schema.ObjectId],
+    listaBanimento: [mongoose.Schema.ObjectId],
+    listaNotificacao: [mongoose.Schema.ObjectId]
 });
 
 module.exports = { Agricultor }

@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var Imagem = new Schema({
+const Imagem = new mongoose.Schema({
     path: { type: String, required: true },
     formato: { type: String, required: true }
 });

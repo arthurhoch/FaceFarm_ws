@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var Gerente = new Schema({
+const Gerente = new mongoose.Schema({
     login: { type: String, required: true, unique: true, lowercase: true, trim: true },
     senha: { type: String, required: true, min: 8 },
     nomeCompleto: { type: String, required: true, lowercase: true, trim: true, min: 6 },
@@ -8,8 +9,8 @@ var Gerente = new Schema({
             validator: validator.isEmail,
             message: '{VALUE} não é um email válido.'
         }},
-    listaPlanoAnuncio: [Schema.Types.ObjectId],
-    listaNotificacao: [Schema.Types.ObjectId]
+    listaPlanoAnuncio: [mongoose.Schema.ObjectId],
+    listaNotificacao: [mongoose.Schema.ObjectId]
 });
 
 module.exports = { Gerente }

@@ -1,9 +1,10 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var Estado = new Schema({
+const Estado = new mongoose.Schema({
     nome: { type: String, required: true, unique: true },
     sigla: { type: String, required: true, unique: true, max: 5, min: 2 },
-    listaCidade: [Schema.Types.ObjectId]
+    listaCidade: [mongoose.Schema.ObjectId]
 });
 
 module.exports = { Estado }

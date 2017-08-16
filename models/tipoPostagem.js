@@ -1,8 +1,9 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var TipoPostagem = new Schema({
+const TipoPostagem = new mongoose.Schema({
     descricao: { type: String, required: true, unique: true },
-    listaPostagen: [Schema.Types.ObjectId]
+    listaPostagen: [mongoose.Schema.ObjectId]
 });
 
 module.exports = { TipoPostagem }

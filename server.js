@@ -3,11 +3,17 @@ require('./config/config');
 const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
+const requireDir = require('require-dir');
 
-const routes = require("./routes");
+var routes = require('./routes/agricultor');
+
+
+// const routes = require("./routes");
 
 var app = express();
-app.use('/api', routes);
+
+app.use('/routes', routes);
+
 app.use(bodyParser.json())
 
 app.listen(3000, () => {

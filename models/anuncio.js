@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var Anuncio = new Schema({
+const Anuncio = new mongoose.Schema({
     imagem: { type: String, required: true },
     views: { type: Number },
     cliques: { type: Number },
@@ -10,9 +11,9 @@ var Anuncio = new Schema({
     gerente_visualizou: { type: Boolean, required: true },
     ativo: { type: Boolean, required: true },
     descricao: { type: String, required: true },
-    listaEntropiaAnuncio: [Schema.Types.ObjectId],
-    listaCultura: [Schema.Types.ObjectId],
-    _idPlanoAnuncio: Schema.Types.ObjectId
+    listaEntropiaAnuncio: [mongoose.Schema.ObjectId],
+    listaCultura: [mongoose.Schema.ObjectId],
+    _idPlanoAnuncio: mongoose.Schema.ObjectId
 });
 
 module.exports = { Anuncio }

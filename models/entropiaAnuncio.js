@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var EntropiaAnuncio = new Schema({
+const EntropiaAnuncio = new mongoose.Schema({
     views: { type: Number, required: true },
     valorPago: { type: Number, required: true },
     entropia: Number

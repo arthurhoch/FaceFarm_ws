@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var Cultura = new Schema({
+const Cultura = new mongoose.Schema({
     nome: { type: String, required: true },
     quantidadeUsuarios: { type: Number },
 });

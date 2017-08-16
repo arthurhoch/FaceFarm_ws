@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var Cidade = new Schema({
+const Cidade = new mongoose.Schema({
     nome: { type: String, required: true, unique: true },
     geo: {type: [Number], index: '2d'},
 });

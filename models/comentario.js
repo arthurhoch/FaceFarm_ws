@@ -1,10 +1,11 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var Comentario = new Schema({
+const Comentario = new mongoose.Schema({
     texto: { type: String, required: true },
     curtidas: { type: Number },
     data: {    type: Date, default: Date.now },
-    listaComentario: [Schema.Types.ObjectId]
+    listaComentario: [mongoose.Schema.ObjectId]
 });
 
 module.exports = { Comentario }

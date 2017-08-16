@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var Notificacao = new Schema({
+const Notificacao = new mongoose.Schema({
     texto: { type: String, required: true },
     data: {    type: Date, default: Date.now },
     preco: { type: Number },

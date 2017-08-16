@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var Moderador = new Schema({
+const Moderador = new mongoose.Schema({
     login: { type: String, required: true, unique: true, lowercase: true, trim: true },
     senha: { type: String, required: true, min: 8 },
     nomeCompleto: { type: String, required: true, lowercase: true, trim: true, min: 6 },
@@ -14,9 +15,9 @@ var Moderador = new Schema({
     bloqueado: { type: Boolean, required: true },
     visitas: { type: Number, default: 0 },
     sexo: { type: String },
-    listaBanimento: [Schema.Types.ObjectId],
-    listaNotificacao: [Schema.Types.ObjectId],
-    listaCidade: [Schema.Types.ObjectId]
+    listaBanimento: [mongoose.Schema.ObjectId],
+    listaNotificacao: [mongoose.Schema.ObjectId],
+    listaCidade: [mongoose.Schema.ObjectId]
 });
 
 module.exports = { Moderador }

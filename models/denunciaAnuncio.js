@@ -1,10 +1,11 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var DenunciaAnuncio = new Schema({
+const DenunciaAnuncio = new mongoose.Schema({
     quantidade_denuncias: { type: Number },
     resolvido: { type: Boolean, required: true },
-    listaMotivos: [Schema.Types.ObjectId],
-    _idAnuncio: Schema.Types.ObjectId
+    listaMotivos: [mongoose.Schema.ObjectId],
+    _idAnuncio: mongoose.Schema.ObjectId
 });
 
 module.exports = { DenunciaAnuncio }

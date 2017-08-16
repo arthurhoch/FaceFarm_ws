@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+const validator = require("validator");
+const mongoose = require('mongoose');
 
-var PlanoAnuncio = new Schema({
+const PlanoAnuncio = new mongoose.Schema({
     nome: { type: String, required: true, unique: true },
     descricao: { type: String, required: true},
     valor: { type: Number, required: true },

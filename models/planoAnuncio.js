@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+
 var PlanoAnuncio = new Schema({
     nome: { type: String, required: true, unique: true },
     descricao: { type: String, required: true},
@@ -5,3 +7,5 @@ var PlanoAnuncio = new Schema({
     validade: {type: Number, require: true},
     ativo: { type: Boolean, required: true }
 });
+
+module.exports = { PlanoAnuncio }

@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+
 var Moderador = new Schema({
     login: { type: String, required: true, unique: true, lowercase: true, trim: true },
     senha: { type: String, required: true, min: 8 },
@@ -16,3 +18,5 @@ var Moderador = new Schema({
     listaNotificacao: [Schema.Types.ObjectId],
     listaCidade: [Schema.Types.ObjectId]
 });
+
+module.exports = { Moderador }

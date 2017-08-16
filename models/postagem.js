@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+
 var Postagem = new Schema({
     texto: { type: String, required: true },
     curtidas: { type: Number },
@@ -10,3 +12,5 @@ var Postagem = new Schema({
     listaCultura: [Schema.Types.ObjectId],
     listaImagen: [Schema.Types.ObjectId]
 });
+
+module.exports = { Postagem }

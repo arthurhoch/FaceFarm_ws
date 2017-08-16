@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+
 var FerramentasAgricolas = new Schema({
     nome: { type: String, required: true },
     descricao: { type: String, required: false, },
@@ -5,3 +7,5 @@ var FerramentasAgricolas = new Schema({
     exibirPublico: { type: Boolean, default: false },
     listaImagen: [Schema.Types.ObjectId]
 });
+
+module.exports = { FerramentasAgricolas }

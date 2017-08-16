@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+
 var Empresa = new Schema({
     login: { type: String, required: true, unique: true, lowercase: true, trim: true },
     senha: { type: String, required: true, min: 8 },
@@ -26,3 +28,5 @@ var Empresa = new Schema({
     listaBanimento: [Schema.Types.ObjectId],
     listaNotificacao: [Schema.Types.ObjectId],
 });
+
+module.exports = { Empresa }

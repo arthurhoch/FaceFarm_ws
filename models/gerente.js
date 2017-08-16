@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+
 var Gerente = new Schema({
     login: { type: String, required: true, unique: true, lowercase: true, trim: true },
     senha: { type: String, required: true, min: 8 },
@@ -9,3 +11,5 @@ var Gerente = new Schema({
     listaPlanoAnuncio: [Schema.Types.ObjectId],
     listaNotificacao: [Schema.Types.ObjectId]
 });
+
+module.exports = { Gerente }

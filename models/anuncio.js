@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+
 var Anuncio = new Schema({
     imagem: { type: String, required: true },
     views: { type: Number },
@@ -12,3 +14,5 @@ var Anuncio = new Schema({
     listaCultura: [Schema.Types.ObjectId],
     _idPlanoAnuncio: Schema.Types.ObjectId
 });
+
+module.exports = { Anuncio }

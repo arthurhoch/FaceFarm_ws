@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+
 var Notificacao = new Schema({
     texto: { type: String, required: true },
     data: {    type: Date, default: Date.now },
@@ -6,3 +8,5 @@ var Notificacao = new Schema({
     link: { type: String },
     dataGeracao: { type: Date, default: Date.now }
 });
+
+module.exports = { Notificacao }

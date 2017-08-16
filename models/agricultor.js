@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+
 var Agricultor = new Schema({
     login: { type: String, required: true, unique: true, lowercase: true, trim: true },
     senha: { type: String, required: true, min: 8 },
@@ -28,3 +30,4 @@ var Agricultor = new Schema({
     listaNotificacao: [Schema.Types.ObjectId]
 });
 
+module.exports = { Agricultor }

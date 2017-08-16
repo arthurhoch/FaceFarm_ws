@@ -6,4 +6,4 @@ var router = express.Router();
 
 router.route('/create').post(agricultorController.create)
 
-module.exports = { router } ;
+module.exports = router;

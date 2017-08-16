@@ -5,14 +5,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const requireDir = require('require-dir');
 
-var routes = require('./routes/agricultor');
-
-
-// const routes = require("./routes");
+const { route } = require('./routes/agricultor');
 
 var app = express();
 
-app.use('/routes', routes);
+app.use('/api', route);
 
 app.use(bodyParser.json())
 

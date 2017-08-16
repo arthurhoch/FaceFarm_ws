@@ -1,12 +1,14 @@
-const express = require('express');
+require('./config/config');
 
-const middlewareAuthenticate = require("./middleware/authenticate")
+const _ = require('lodash');
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const routes = require("./routes");
 
 var app = express();
-
-app.use((req, res, next) => {
-    // middlewareAuthenticate.authenticate(req, res, next);
-});
+app.use('/api', routes);
+app.use(bodyParser.json())
 
 app.listen(3000, () => {
     console.log('Server listen on port 3000');

@@ -5,13 +5,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const requireDir = require('require-dir');
 
-const { route } = require('./routes/agricultor');
+const {mongoose} = require('./db/mongoose');
+const { agricultorRouter } = require('./routes/agricultor');
 
 var app = express();
-
-app.use('/api', route);
-
 app.use(bodyParser.json())
+
+app.use('/agricultor', agricultorRouter);
 
 app.listen(3000, () => {
     console.log('Server listen on port 3000');

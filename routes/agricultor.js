@@ -2,8 +2,8 @@ var express = require('express');
 
 var agricultorController = require('../controllers/agricultor');
 
-var router = express.Router();
+var agricultorRouter = express.Router();
 
-router.route('/create').post(agricultorController.create)
+agricultorRouter.route('/create').post(agricultorController.create);
 
-module.exports = router;
+module.exports = { agricultorRouter };

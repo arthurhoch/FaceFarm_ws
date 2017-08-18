@@ -6,7 +6,7 @@ const { ObjectID } = require('mongodb')
 const create = (req, res) => {
 	var body = _.pick(req.body, ['login', 'senha', 'nomeCompleto', 
 	'cpf', 'email', 'telefone', 'whattsapp', 'bloqueado', 'visitas', 
-	'sexo', 'imagemPerfil', 'dataCriacaoConta', 'dataNascrimento', 
+	'sexo', 'imagemPerfil', 'dataCriacaoConta', 'dataNascimento', 
 	'hashConfirmacao']);
 
     var agricultor = new Agricultor(body)
@@ -36,7 +36,7 @@ const remove = (req, res) => {
 const update = (req, res) => {
 	var body = _.pick(req.body, ['_id', 'login', 'senha', 'nomeCompleto', 
 	'cpf', 'email', 'telefone', 'whattsapp', 'bloqueado', 'visitas', 
-	'sexo', 'imagemPerfil', 'dataCriacaoConta', 'dataNascrimento', 
+	'sexo', 'imagemPerfil', 'dataCriacaoConta', 'dataNascimento', 
 	'hashConfirmacao']);
 
 	console.log(body);

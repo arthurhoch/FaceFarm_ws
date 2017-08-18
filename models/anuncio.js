@@ -1,7 +1,7 @@
 const validator = require("validator");
 const mongoose = require('mongoose');
 
-const Anuncio = new mongoose.Schema({
+const Anuncio = mongoose.model(('Anuncio'),{
     imagem: { type: String, required: true },
     views: { type: Number },
     cliques: { type: Number },

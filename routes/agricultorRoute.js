@@ -1,6 +1,6 @@
 var express = require('express');
 
-var agricultorController = require('../controllers/agricultor');
+var agricultorController = require('../controllers/agricultorController');
 
 var agricultorRouter = express.Router();
 

@@ -20,7 +20,7 @@ const Agricultor = mongoose.model('Agricultor', {
     sexo: { type: String },
     imagemPerfil: { type: String },
     dataCriacaoConta: { type: Date, default: Date.now },
-    dataNascrimento: { type: Date, default: Date.now },
+    dataNascimento: { type: Date, default: Date.now },
     hashConfirmacao: { type: String },
     configuracao: mongoose.Schema.ObjectId,
     listaDenunciaUsuario: [mongoose.Schema.ObjectId],

@@ -1,7 +1,7 @@
 const validator = require("validator");
 const mongoose = require('mongoose');
 
-const Agricultor = mongoose.model('Agricultor', {
+const AgricultorSchema = new mongoose.Schema({  
     login: { type: String, required: true, unique: true, lowercase: true, trim: true },
     senha: { type: String, required: true, min: 8 },
     nomeCompleto: { type: String, required: true, lowercase: true, trim: true, min: 6 },
@@ -34,5 +34,7 @@ const Agricultor = mongoose.model('Agricultor', {
     listaBanimento: [mongoose.Schema.ObjectId],
     listaNotificacao: [mongoose.Schema.ObjectId]
 });
+
+const Agricultor = mongoose.model('Agricultor', AgricultorSchema);
 
 module.exports = { Agricultor }

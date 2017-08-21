@@ -39,8 +39,6 @@ const update = (req, res) => {
 	'sexo', 'imagemPerfil', 'dataCriacaoConta', 'dataNascimento', 
 	'hashConfirmacao']);
 
-	console.log(body);
-
 	var agricultor = new Agricultor(body)
 
 	id = agricultor._id;
@@ -48,14 +46,7 @@ const update = (req, res) => {
 	if (!ObjectID.isValid(id)) {
 		return res.status(404).send()
 	}
-
-	if (_.isBoolean(agricultor.completed) && agricultor.completed) {
-		agricultor.completedAt = new Date().getTime();
-	} else {
-		agricultor.completed = false
-		agricultor.completedAt = null
-	}
-
+	
 	Agricultor.findByIdAndUpdate(id, {$set: agricultor}, {new: true}).then((agricultorEdited) => {
 		if (!agricultorEdited) {
 			return res.status(404).send()
@@ -63,7 +54,6 @@ const update = (req, res) => {
 
 		return res.send({agricultorEdited})
 	}).catch((e) => {
-		console.log(e);
 		return res.status(400).send()
 	});
 };

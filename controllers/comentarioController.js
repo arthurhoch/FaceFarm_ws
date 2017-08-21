@@ -1,15 +1,14 @@
 const _ = require('lodash');
 
-const { Anuncio } = require('../models/anuncio');
-const { ObjectID } = require('mongodb');
+const { Comentario } = require('../models/comentario');
+const { ObjectID } = require('mongodb')
 
 const create = (req, res) => {
-	var body = _.pick(req.body, ['imagem', 'views', 'cliques', 
-    'valor', 'inicio', 'fim', 'gerente_visualizou', 'ativo', 'descricao']);
+	var body = _.pick(req.body, ['texto', 'curtidas', 'data', 'listaComentario']);
 
-    var anuncio = new Anuncio(body);
+    var comentario = new Comentario(body)
 
-    anuncio.save().then((doc) => {
+    comentario.save().then((doc) => {
         return res.send(doc)
     }, (e) => {
         return res.status(400).send(e)
@@ -22,40 +21,40 @@ const remove = (req, res) => {
 	if (!ObjectID.isValid(id)) {
 		return res.status(404).send()
 	}
-	Anuncio.findByIdAndRemove(id).then((anuncio) => {
-		if (!anuncio) {
+
+	Comentario.findByIdAndRemove(id).then((comentario) => {
+		if (!comentario) {
 			return res.status(404).send()
 		}
-		return res.send({anuncio})
+		return res.send({comentario})
 	}).catch((e) => res.status(400).send())
 };
 
 const update = (req, res) => {
-	var body = _.pick(req.body, ['_id', 'imagem', 'views', 'cliques', 
-    'valor', 'inicio', 'fim', 'gerente_visualizou', 'ativo', 'descricao']);
+	var body = _.pick(req.body, ['texto', 'curtidas', 'data', 'listaComentario']);
 
-	var anuncio = new Anuncio(body)
+	var comentario = new Comentario(body)
 
-	id = anuncio._id;
+	id = comentario._id;
 	
 	if (!ObjectID.isValid(id)) {
 		return res.status(404).send()
 	}
 
-	Anuncio.findByIdAndUpdate(id, {$set: anuncio}, {new: true}).then((anuncioEdited) => {
-		if (!anuncioEdited) {
+	Comentario.findByIdAndUpdate(id, {$set: comentario}, {new: true}).then((comentarioEdited) => {
+		if (!comentarioEdited) {
 			return res.status(404).send()
 		}
 
-		return res.send({anuncioEdited})
+		return res.send({comentarioEdited})
 	}).catch((e) => {
 		return res.status(400).send()
 	});
 };
 
 const getList = (req, res) => {
-	Anuncio.find().then((anuncioList) => {
-		return res.send({anuncioList})
+	Comentario.find().then((comentarioList) => {
+		return res.send({comentarioList})
 	}), (e) => {
 		return res.status(400).send(e)
 	}
@@ -67,11 +66,11 @@ const getById = (req, res) => {
 		return res.status(404).send()
 	}
 
-	Anuncio.findById(id).then((anuncio) => {
-		if (!anuncio) {
+	Comentario.findById(id).then((comentario) => {
+		if (!comentario) {
 			return res.status(404).send()		
 		}
-		return res.send({anuncio})
+		return res.send({comentario})
 	}).catch((e) => res.status(400).send())
 };
 

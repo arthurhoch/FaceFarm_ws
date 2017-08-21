@@ -1,15 +1,14 @@
 const _ = require('lodash');
 
-const { Anuncio } = require('../models/anuncio');
-const { ObjectID } = require('mongodb');
+const { Cultura } = require('../models/cultura');
+const { ObjectID } = require('mongodb')
 
 const create = (req, res) => {
-	var body = _.pick(req.body, ['imagem', 'views', 'cliques', 
-    'valor', 'inicio', 'fim', 'gerente_visualizou', 'ativo', 'descricao']);
+	var body = _.pick(req.body, ['nome','quantidadeUsuarios']);
 
-    var anuncio = new Anuncio(body);
+    var cultura = new Cultura(body)
 
-    anuncio.save().then((doc) => {
+    cultura.save().then((doc) => {
         return res.send(doc)
     }, (e) => {
         return res.status(400).send(e)
@@ -22,40 +21,40 @@ const remove = (req, res) => {
 	if (!ObjectID.isValid(id)) {
 		return res.status(404).send()
 	}
-	Anuncio.findByIdAndRemove(id).then((anuncio) => {
-		if (!anuncio) {
+
+	Cultura.findByIdAndRemove(id).then((cultura) => {
+		if (!cultura) {
 			return res.status(404).send()
 		}
-		return res.send({anuncio})
+		return res.send({cultura})
 	}).catch((e) => res.status(400).send())
 };
 
 const update = (req, res) => {
-	var body = _.pick(req.body, ['_id', 'imagem', 'views', 'cliques', 
-    'valor', 'inicio', 'fim', 'gerente_visualizou', 'ativo', 'descricao']);
+	var body = _.pick(req.body, ['nome','quantidadeUsuarios']);
 
-	var anuncio = new Anuncio(body)
+	var cultura = new Cultura(body)
 
-	id = anuncio._id;
+	id = cultura._id;
 	
 	if (!ObjectID.isValid(id)) {
 		return res.status(404).send()
 	}
 
-	Anuncio.findByIdAndUpdate(id, {$set: anuncio}, {new: true}).then((anuncioEdited) => {
-		if (!anuncioEdited) {
+	Cultura.findByIdAndUpdate(id, {$set: cultura}, {new: true}).then((culturaEdited) => {
+		if (!culturaEdited) {
 			return res.status(404).send()
 		}
 
-		return res.send({anuncioEdited})
+		return res.send({culturaEdited})
 	}).catch((e) => {
 		return res.status(400).send()
 	});
 };
 
 const getList = (req, res) => {
-	Anuncio.find().then((anuncioList) => {
-		return res.send({anuncioList})
+	Cultura.find().then((culturaList) => {
+		return res.send({culturaList})
 	}), (e) => {
 		return res.status(400).send(e)
 	}
@@ -67,11 +66,11 @@ const getById = (req, res) => {
 		return res.status(404).send()
 	}
 
-	Anuncio.findById(id).then((anuncio) => {
-		if (!anuncio) {
+	Cultura.findById(id).then((cultura) => {
+		if (!cultura) {
 			return res.status(404).send()		
 		}
-		return res.send({anuncio})
+		return res.send({cultura})
 	}).catch((e) => res.status(400).send())
 };
 

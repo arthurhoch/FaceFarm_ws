@@ -1,7 +1,7 @@
 const validator = require("validator");
 const mongoose = require('mongoose');
 
-const Postagem = new mongoose.Schema({
+const PostagemSchema = new mongoose.Schema({
     texto: { type: String, required: true },
     curtidas: { type: Number },
     data: {    type: Date, default: Date.now },
@@ -13,5 +13,7 @@ const Postagem = new mongoose.Schema({
     listaCultura: [mongoose.Schema.ObjectId],
     listaImagen: [mongoose.Schema.ObjectId]
 });
+
+const Postagem = mongoose.model(('Postagem'), PostagemSchema);
 
 module.exports = { Postagem }

@@ -1,15 +1,14 @@
 const _ = require('lodash');
 
-const { Anuncio } = require('../models/anuncio');
-const { ObjectID } = require('mongodb');
+const { PlanoAnuncio } = require('../models/planoAnuncio');
+const { ObjectID } = require('mongodb')
 
 const create = (req, res) => {
-	var body = _.pick(req.body, ['imagem', 'views', 'cliques', 
-    'valor', 'inicio', 'fim', 'gerente_visualizou', 'ativo', 'descricao']);
+	var body = _.pick(req.body, ['nome', 'descricao', 'valor', 'validade', 'ativo']);
 
-    var anuncio = new Anuncio(body);
+    var planoAnuncio = new PlanoAnuncio(body)
 
-    anuncio.save().then((doc) => {
+    planoAnuncio.save().then((doc) => {
         return res.send(doc)
     }, (e) => {
         return res.status(400).send(e)
@@ -22,40 +21,40 @@ const remove = (req, res) => {
 	if (!ObjectID.isValid(id)) {
 		return res.status(404).send()
 	}
-	Anuncio.findByIdAndRemove(id).then((anuncio) => {
-		if (!anuncio) {
+
+	PlanoAnuncio.findByIdAndRemove(id).then((planoAnuncio) => {
+		if (!planoAnuncio) {
 			return res.status(404).send()
 		}
-		return res.send({anuncio})
+		return res.send({planoAnuncio})
 	}).catch((e) => res.status(400).send())
 };
 
 const update = (req, res) => {
-	var body = _.pick(req.body, ['_id', 'imagem', 'views', 'cliques', 
-    'valor', 'inicio', 'fim', 'gerente_visualizou', 'ativo', 'descricao']);
+	var body = _.pick(req.body, ['nome', 'descricao', 'valor', 'validade', 'ativo']);
 
-	var anuncio = new Anuncio(body)
+	var planoAnuncio = new PlanoAnuncio(body)
 
-	id = anuncio._id;
+	id = planoAnuncio._id;
 	
 	if (!ObjectID.isValid(id)) {
 		return res.status(404).send()
 	}
 
-	Anuncio.findByIdAndUpdate(id, {$set: anuncio}, {new: true}).then((anuncioEdited) => {
-		if (!anuncioEdited) {
+	PlanoAnuncio.findByIdAndUpdate(id, {$set: planoAnuncio}, {new: true}).then((planoAnuncioEdited) => {
+		if (!planoAnuncioEdited) {
 			return res.status(404).send()
 		}
 
-		return res.send({anuncioEdited})
+		return res.send({planoAnuncioEdited})
 	}).catch((e) => {
 		return res.status(400).send()
 	});
 };
 
 const getList = (req, res) => {
-	Anuncio.find().then((anuncioList) => {
-		return res.send({anuncioList})
+	PlanoAnuncio.find().then((planoAnuncioList) => {
+		return res.send({planoAnuncioList})
 	}), (e) => {
 		return res.status(400).send(e)
 	}
@@ -67,11 +66,11 @@ const getById = (req, res) => {
 		return res.status(404).send()
 	}
 
-	Anuncio.findById(id).then((anuncio) => {
-		if (!anuncio) {
+	PlanoAnuncio.findById(id).then((planoAnuncio) => {
+		if (!planoAnuncio) {
 			return res.status(404).send()		
 		}
-		return res.send({anuncio})
+		return res.send({planoAnuncio})
 	}).catch((e) => res.status(400).send())
 };
 

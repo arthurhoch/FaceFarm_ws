@@ -1,7 +1,7 @@
 const validator = require("validator");
 const mongoose = require('mongoose');
 
-const Anuncio = mongoose.model(('Anuncio'),{
+const AnuncioSchema = new mongoose.Schema({  
     imagem: { type: String, required: true },
     views: { type: Number },
     cliques: { type: Number },
@@ -15,5 +15,7 @@ const Anuncio = mongoose.model(('Anuncio'),{
     listaCultura: [mongoose.Schema.ObjectId],
     _idPlanoAnuncio: mongoose.Schema.ObjectId
 });
+
+const Anuncio = mongoose.model(('Anuncio'), AnuncioSchema);
 
 module.exports = { Anuncio }

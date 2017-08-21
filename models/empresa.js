@@ -1,7 +1,7 @@
 const validator = require("validator");
 const mongoose = require('mongoose');
 
-const Empresa = new mongoose.Schema({
+const EmpresaSchema = new mongoose.Schema({
     login: { type: String, required: true, unique: true, lowercase: true, trim: true },
     senha: { type: String, required: true, min: 8 },
     nomeCompleto: { type: String, required: true, lowercase: true, trim: true, min: 6 },
@@ -29,5 +29,7 @@ const Empresa = new mongoose.Schema({
     listaBanimento: [mongoose.Schema.ObjectId],
     listaNotificacao: [mongoose.Schema.ObjectId],
 });
+
+const Empresa = mongoose.model(('Empresa'), EmpresaSchema);
 
 module.exports = { Empresa }

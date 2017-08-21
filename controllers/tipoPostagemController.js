@@ -1,15 +1,14 @@
 const _ = require('lodash');
 
-const { Anuncio } = require('../models/anuncio');
-const { ObjectID } = require('mongodb');
+const { TipoPostagem } = require('../models/tipoPostagem');
+const { ObjectID } = require('mongodb')
 
 const create = (req, res) => {
-	var body = _.pick(req.body, ['imagem', 'views', 'cliques', 
-    'valor', 'inicio', 'fim', 'gerente_visualizou', 'ativo', 'descricao']);
+	var body = _.pick(req.body, ['descricao', 'listaPostagen']);
 
-    var anuncio = new Anuncio(body);
+    var tipoPostagem = new TipoPostagem(body)
 
-    anuncio.save().then((doc) => {
+    tipoPostagem.save().then((doc) => {
         return res.send(doc)
     }, (e) => {
         return res.status(400).send(e)
@@ -22,40 +21,40 @@ const remove = (req, res) => {
 	if (!ObjectID.isValid(id)) {
 		return res.status(404).send()
 	}
-	Anuncio.findByIdAndRemove(id).then((anuncio) => {
-		if (!anuncio) {
+
+	TipoPostagem.findByIdAndRemove(id).then((tipoPostagem) => {
+		if (!tipoPostagem) {
 			return res.status(404).send()
 		}
-		return res.send({anuncio})
+		return res.send({tipoPostagem})
 	}).catch((e) => res.status(400).send())
 };
 
 const update = (req, res) => {
-	var body = _.pick(req.body, ['_id', 'imagem', 'views', 'cliques', 
-    'valor', 'inicio', 'fim', 'gerente_visualizou', 'ativo', 'descricao']);
+	var body = _.pick(req.body, ['descricao', 'listaPostagen']);
 
-	var anuncio = new Anuncio(body)
+	var tipoPostagem = new TipoPostagem(body)
 
-	id = anuncio._id;
+	id = tipoPostagem._id;
 	
 	if (!ObjectID.isValid(id)) {
 		return res.status(404).send()
 	}
 
-	Anuncio.findByIdAndUpdate(id, {$set: anuncio}, {new: true}).then((anuncioEdited) => {
-		if (!anuncioEdited) {
+	TipoPostagem.findByIdAndUpdate(id, {$set: tipoPostagem}, {new: true}).then((tipoPostagemEdited) => {
+		if (!tipoPostagemEdited) {
 			return res.status(404).send()
 		}
 
-		return res.send({anuncioEdited})
+		return res.send({tipoPostagemEdited})
 	}).catch((e) => {
 		return res.status(400).send()
 	});
 };
 
 const getList = (req, res) => {
-	Anuncio.find().then((anuncioList) => {
-		return res.send({anuncioList})
+	TipoPostagem.find().then((tipoPostagemList) => {
+		return res.send({tipoPostagemList})
 	}), (e) => {
 		return res.status(400).send(e)
 	}
@@ -67,11 +66,11 @@ const getById = (req, res) => {
 		return res.status(404).send()
 	}
 
-	Anuncio.findById(id).then((anuncio) => {
-		if (!anuncio) {
+	TipoPostagem.findById(id).then((tipoPostagem) => {
+		if (!tipoPostagem) {
 			return res.status(404).send()		
 		}
-		return res.send({anuncio})
+		return res.send({tipoPostagem})
 	}).catch((e) => res.status(400).send())
 };
 

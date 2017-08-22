@@ -1,5 +1,9 @@
 const validator = require("validator");
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const _ = require('lodash');
+var fs = require('fs');
 
 const AgricultorSchema = new mongoose.Schema({  
     login: { type: String, required: true, unique: true, lowercase: true, trim: true },
@@ -32,9 +36,90 @@ const AgricultorSchema = new mongoose.Schema({
     listaFerramenta: [mongoose.Schema.ObjectId],
     listaCidade: [mongoose.Schema.ObjectId],
     listaBanimento: [mongoose.Schema.ObjectId],
-    listaNotificacao: [mongoose.Schema.ObjectId]
+    listaNotificacao: [mongoose.Schema.ObjectId],
+    tokens: [{
+        access: {
+            type: String,
+            required: true
+        },
+        token: {
+            type: String,
+            required: true
+        }
+    }]
+});
+
+AgricultorSchema.methods.generateAuthToken = function () {
+    var Agricultor = this;
+
+    var cert = fs.readFileSync('../keys/private.key');
+    var access = 'auth';
+    var token = jwt.sign({_id: Agricultor._id.toHexString(), access},
+        cert, { algorithm: 'RS256'};
+
+    Agricultor.tokens.push({access, token});
+
+    return Agricultor.save().then(() => {
+        return token;
+    });
+};
+
+AgricultorSchema.statics.findByToken = function (token) {
+    var Agricultor = this;
+    var decoded;
+
+    var cert = fs.readFileSync('../keys/public.pem');
+
+    try {
+        decoded = jwt.verify(token, cert, { algorithms: ['RS256'] });
+    } catch (e) {
+        return Promise.reject();
+    }
+
+    return Agricultor.findOne({
+        '_id': decoded._id,
+        'tokens.token': token,
+        'tokens.access': 'auth'
+    });
+};
+
+AgricultorSchema.statics.findByCredentials = function (email, senha) {
+    var Agricultor = this;
+
+    return Agricultor.findOne({email}).then((agricultor) => {
+        if (!agricultor) {
+            return Promise.reject();
+        }
+
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(senha, agricultor.senha, (err, res) => {
+                if (res) {
+                    resolve(agricultor);
+                } else {
+                    reject();
+                }
+            });
+        });
+    });
+};
+
+AgricultorSchema.pre('save', function (next) {
+    var Agricultor = this;
+
+    if (Agricultor.isModified('senha')) {
+        var senha = Agricultor.senha
+        bcrypt.genSalt(1, (err, salt) => {
+            bcrypt.hash(senha, salt, (err, hash) => {
+                Agricultor.senha = hash;
+                next();
+            })
+        }) 
+
+    } else {
+        next();
+    }
 });
 
 const Agricultor = mongoose.model('Agricultor', AgricultorSchema);
 
-module.exports = { Agricultor }
+module.exports = { Agricultor };

@@ -50,7 +50,7 @@ EmpresaSchema.methods.generateAuthToken = function () {
     var cert = fs.readFileSync('../keys/private.key');
     var access = 'auth';
     var token = jwt.sign({_id: Empresa._id.toHexString(), access},
-        cert, { algorithm: 'RS256'};
+        cert, { algorithm: 'RS256'});
 
     Empresa.tokens.push({access, token});
 

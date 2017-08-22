@@ -40,7 +40,7 @@ ModeradorSchema.methods.generateAuthToken = function () {
     var cert = fs.readFileSync('../keys/private.key');
     var access = 'auth';
     var token = jwt.sign({_id: Moderador._id.toHexString(), access},
-        cert, { algorithm: 'RS256'};
+        cert, { algorithm: 'RS256'});
 
     Moderador.tokens.push({access, token});
 

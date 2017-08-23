@@ -35,30 +35,37 @@ GerenteSchema.methods.generateAuthToken = function() {
 
     var cert = fs.readFileSync('server/keys/private.key');
     var access = 'auth';
-    var token = jwt.sign({ _id: Gerente._id.toHexString(), access },
+    var token = jwt.sign({ _id: Gerente._id.toHexString() + 'azw', access },
         cert, { algorithm: 'RS256' });
 
 
-    var foundToken = false;
-    Gerente.tokens.forEach(function(token, key) {
-        if (token.access === 'auth') {
-            Gerente.tokens[key].access = access;
-            Gerente.tokens[key].token = token;
+    // var foundToken = false;
+    // Gerente.tokens.forEach(function(token, key) {
+    //     if (token.access === 'auth') {
+    //         Gerente.tokens[key].access = access;
+    //         Gerente.tokens[key].token = token;
 
-            foundToken = true;
-        }
+    //         foundToken = true;
+    //     }
+    // });
+
+    let tokenGerente = Gerente.tokens.filter( (token) => {
+        token.access === 'auth';
     });
-
-    if (!foundToken) {
-        Gerente.tokens.push({ access, token });
-        return Gerente.save().then(() => {
-            return token;
-        });
-    }
-
-    return token;
+    tokenGerente.token = token;
 
 
+    return Gerente.save().then(() => {
+        return token;
+    });
+    // if (!foundToken) {
+    //     Gerente.tokens.push({ access, token });
+    //     return Gerente.save().then(() => {
+    //         return token;
+    //     });
+    // }
+
+    return Promise.resolve(token);
 };
 
 GerenteSchema.statics.findByToken = function(token) {
@@ -82,9 +89,7 @@ GerenteSchema.statics.findByToken = function(token) {
 
 GerenteSchema.statics.findByCredentials = function(email, login, senha) {
     var Gerente = this;
-    console.log(email, login, senha)
     return Gerente.findOne({ email, login }).then((gerente) => {
-        console.log(gerente);
         if (!gerente) {
             return Promise.reject();
         }
@@ -92,7 +97,6 @@ GerenteSchema.statics.findByCredentials = function(email, login, senha) {
         return new Promise((resolve, reject) => {
             bcrypt.compare(senha, gerente.senha, (err, res) => {
                 if (res) {
-                    console.log(gerente);
                     resolve(gerente);
                 } else {
                     reject();

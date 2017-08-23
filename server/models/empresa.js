@@ -10,19 +10,23 @@ const EmpresaSchema = new mongoose.Schema({
     senha: { type: String, required: true, min: 8 },
     nomeCompleto: { type: String, required: true, lowercase: true, trim: true, min: 6 },
     cnpj: { type: String, required: true, unique: true, min: 14, max: 14 },
-    email: {type: String, validate: {
+    email: {
+        required: true,
+        type: String,
+        validate: {
             validator: validator.isEmail,
             message: '{VALUE} não é um email válido.'
-        }},
+        }
+    },
     telefone: { type: String },
     whattsapp: { type: String },
     bloqueado: { type: Boolean, required: true },
     visitas: { type: Number, default: 0 },
     sexo: { type: String },
-    imagemPerfil: { type: String  },
-    dataCriacaoConta: {    type: Date, default: Date.now },
+    imagemPerfil: { type: String },
+    dataCriacaoConta: { type: Date, default: Date.now },
     dataAberturaEmpresa: { type: Date, default: Date.now },
-    hashConfirmacao: { type: String},
+    hashConfirmacao: { type: String },
     configuracao: mongoose.Schema.ObjectId,
     listaDenunciaUsuario: [mongoose.Schema.ObjectId],
     listaCultura: [mongoose.Schema.ObjectId],
@@ -44,26 +48,37 @@ const EmpresaSchema = new mongoose.Schema({
     }]
 });
 
-EmpresaSchema.methods.generateAuthToken = function () {
+EmpresaSchema.methods.generateAuthToken = function() {
     var Empresa = this;
 
-    var cert = fs.readFileSync('../keys/private.key');
+    var cert = fs.readFileSync('server/keys/private.key');
     var access = 'auth';
-    var token = jwt.sign({_id: Empresa._id.toHexString(), access},
-        cert, { algorithm: 'RS256'});
+    var token = jwt.sign({ _id: Empresa._id.toHexString(), access },
+        cert, { algorithm: 'RS256' });
 
-    Empresa.tokens.push({access, token});
+    let tokenAuth = Empresa.tokens.filter((t) => {
+        if (t.access === 'auth') {
+            t.token = token;
+            return true;
+        }
+
+        return false;
+    });
+
+    if (tokenAuth.length === 0) {
+        Empresa.tokens.push({ access, token });
+    }
 
     return Empresa.save().then(() => {
         return token;
     });
 };
 
-EmpresaSchema.statics.findByToken = function (token) {
+EmpresaSchema.statics.findByToken = function(token) {
     var Empresa = this;
     var decoded;
 
-    var cert = fs.readFileSync('../keys/public.pem');
+    var cert = fs.readFileSync('server/keys/public.pem');
 
     try {
         decoded = jwt.verify(token, cert, { algorithms: ['RS256'] });
@@ -78,10 +93,10 @@ EmpresaSchema.statics.findByToken = function (token) {
     });
 };
 
-EmpresaSchema.statics.findByCredentials = function (email, senha) {
+EmpresaSchema.statics.findByCredentials = function(email, login, senha) {
     var Empresa = this;
 
-    return Empresa.findOne({email}).then((empresa) => {
+    return Empresa.findOne({ email, login }).then((empresa) => {
         if (!empresa) {
             return Promise.reject();
         }
@@ -98,7 +113,7 @@ EmpresaSchema.statics.findByCredentials = function (email, senha) {
     });
 };
 
-EmpresaSchema.pre('save', function (next) {
+EmpresaSchema.pre('save', function(next) {
     var Empresa = this;
 
     if (Empresa.isModified('senha')) {
@@ -108,7 +123,7 @@ EmpresaSchema.pre('save', function (next) {
                 Empresa.senha = hash;
                 next();
             })
-        }) 
+        })
 
     } else {
         next();

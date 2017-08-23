@@ -5,13 +5,14 @@ const bcrypt = require('bcryptjs');
 const _ = require('lodash');
 var fs = require('fs');
 
-const AgricultorSchema = new mongoose.Schema({  
+const AgricultorSchema = new mongoose.Schema({
     login: { type: String, required: true, unique: true, lowercase: true, trim: true },
     senha: { type: String, required: true, min: 8 },
     nomeCompleto: { type: String, required: true, lowercase: true, trim: true, min: 6 },
     cpf: { type: String, required: true, unique: true, min: 11, max: 11 },
     email: {
         type: String,
+        required: true,
         validate: {
             validator: validator.isEmail,
             message: '{VALUE} não é um email válido.'
@@ -49,26 +50,38 @@ const AgricultorSchema = new mongoose.Schema({
     }]
 });
 
-AgricultorSchema.methods.generateAuthToken = function () {
+AgricultorSchema.methods.generateAuthToken = function() {
     var Agricultor = this;
+    console.log("asdwasd")
 
-    var cert = fs.readFileSync('../keys/private.key');
+    var cert = fs.readFileSync('server/keys/private.key');
     var access = 'auth';
-    var token = jwt.sign({_id: Agricultor._id.toHexString(), access},
-        cert, { algorithm: 'RS256'});
+    var token = jwt.sign({ _id: Agricultor._id.toHexString(), access },
+        cert, { algorithm: 'RS256' });
 
-    Agricultor.tokens.push({access, token});
+    let tokenAuth = Agricultor.tokens.filter((t) => {
+        if (t.access === 'auth') {
+            t.token = token;
+            return true;
+        }
+
+        return false;
+    });
+
+    if (tokenAuth.length === 0) {
+        Agricultor.tokens.push({ access, token });
+    }
 
     return Agricultor.save().then(() => {
         return token;
     });
 };
 
-AgricultorSchema.statics.findByToken = function (token) {
+AgricultorSchema.statics.findByToken = function(token) {
     var Agricultor = this;
     var decoded;
 
-    var cert = fs.readFileSync('../keys/public.pem');
+    var cert = fs.readFileSync('server/keys/public.pem');
 
     try {
         decoded = jwt.verify(token, cert, { algorithms: ['RS256'] });
@@ -83,10 +96,11 @@ AgricultorSchema.statics.findByToken = function (token) {
     });
 };
 
-AgricultorSchema.statics.findByCredentials = function (email, senha) {
+AgricultorSchema.statics.findByCredentials = function(email, login, senha) {
     var Agricultor = this;
 
-    return Agricultor.findOne({email}).then((agricultor) => {
+    return Agricultor.findOne({ email, login }).then((agricultor) => {
+        
         if (!agricultor) {
             return Promise.reject();
         }
@@ -103,7 +117,7 @@ AgricultorSchema.statics.findByCredentials = function (email, senha) {
     });
 };
 
-AgricultorSchema.pre('save', function (next) {
+AgricultorSchema.pre('save', function(next) {
     var Agricultor = this;
 
     if (Agricultor.isModified('senha')) {
@@ -113,7 +127,7 @@ AgricultorSchema.pre('save', function (next) {
                 Agricultor.senha = hash;
                 next();
             })
-        }) 
+        })
 
     } else {
         next();

@@ -28,7 +28,7 @@ const { notificacaoRouter } = require('./server/routes/notificacaoRouter');
 const { planoAnuncioRouter } = require('./server/routes/planoAnuncioRouter');
 const { postagemRouter } = require('./server/routes/postagemRouter');
 const { tipoPostagemRouter } = require('./server/routes/tipoPostagemRouter');
-const { authAdminsRouter } = require('./server/routes/authAdminsRouter');
+const { authRouter } = require('./server/routes/authRouter');
 
 var app = express();
 app.use(bodyParser.json());
@@ -54,7 +54,7 @@ app.use('/notificacao', notificacaoRouter);
 app.use('/planoAnuncio', planoAnuncioRouter);
 app.use('/postagem', postagemRouter);
 app.use('/tipoPostagem', tipoPostagemRouter);
-app.use('/authAdmins', authAdminsRouter);
+app.use('/auth', authRouter);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server listen on port ${process.env.PORT}`);

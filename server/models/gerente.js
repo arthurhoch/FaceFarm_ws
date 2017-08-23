@@ -38,25 +38,22 @@ GerenteSchema.methods.generateAuthToken = function() {
     var token = jwt.sign({ _id: Gerente._id.toHexString(), access },
         cert, { algorithm: 'RS256' });
 
-    let tokenGerente = Gerente.tokens.filter( (t) => {
+    let tokenAuth = Gerente.tokens.filter( (t) => {
         if (t.access === 'auth') {
             t.token = token;
+            return true;
         }
 
-        return t.access === 'auth';
+        return false;
     });
 
-    console.log(tokenGerente.length);
-
-    if (tokenGerente.length === 0) {
+    if (tokenAuth.length === 0) {
         Gerente.tokens.push({access, token});
     }
 
     return Gerente.save().then(() => {
         return token;
     });
-
-    return Promise.resolve(token);
 };
 
 GerenteSchema.statics.findByToken = function(token) {
@@ -80,7 +77,9 @@ GerenteSchema.statics.findByToken = function(token) {
 
 GerenteSchema.statics.findByCredentials = function(email, login, senha) {
     var Gerente = this;
+
     return Gerente.findOne({ email, login }).then((gerente) => {
+        
         if (!gerente) {
             return Promise.reject();
         }

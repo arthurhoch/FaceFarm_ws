@@ -10,10 +10,13 @@ const ModeradorSchema = new mongoose.Schema({
     senha: { type: String, required: true, min: 8 },
     nomeCompleto: { type: String, required: true, lowercase: true, trim: true, min: 6 },
     cpf: { type: String, required: true, unique: true, min: 11, max: 11 },
-    email: {type: String, validate: {
+    email: {
+        type: String,
+        validate: {
             validator: validator.isEmail,
             message: '{VALUE} não é um email válido.'
-        }},
+        }
+    },
     telefone: { type: String },
     whattsapp: { type: String },
     bloqueado: { type: Boolean, required: true },
@@ -34,25 +37,36 @@ const ModeradorSchema = new mongoose.Schema({
     }]
 });
 
-ModeradorSchema.methods.generateAuthToken = function () {
+ModeradorSchema.methods.generateAuthToken = function() {
     var Moderador = this;
 
     var cert = fs.readFileSync('server/keys/private.key');
     var access = 'auth';
-    var token = jwt.sign({_id: Moderador._id.toHexString(), access},
-        cert, { algorithm: 'RS256'});
+    var token = jwt.sign({ _id: Moderador._id.toHexString(), access },
+        cert, { algorithm: 'RS256' });
 
-    Moderador.tokens.push({access, token});
+    let tokenAuth = Moderador.tokens.filter((t) => {
+        if (t.access === 'auth') {
+            t.token = token;
+            return true;
+        }
+
+        return false;
+    });
+
+    if (tokenAuth.length === 0) {
+        Moderador.tokens.push({ access, token });
+    }
 
     return Moderador.save().then(() => {
         return token;
     });
 };
 
-ModeradorSchema.statics.findByToken = function (token) {
+ModeradorSchema.statics.findByToken = function(token) {
     var Moderador = this;
     var decoded;
-    
+
     var cert = fs.readFileSync('server/keys/public.pem');
 
     try {
@@ -68,11 +82,11 @@ ModeradorSchema.statics.findByToken = function (token) {
     });
 };
 
-ModeradorSchema.statics.findByCredentials = function (email, login, senha) {
+ModeradorSchema.statics.findByCredentials = function(email, login, senha) {
     var Moderador = this;
 
-    return Moderador.findOne({email, login}).then((moderador) => {
-        
+    return Moderador.findOne({ email, login }).then((moderador) => {
+
         if (!moderador) {
             return Promise.reject();
         }
@@ -90,7 +104,7 @@ ModeradorSchema.statics.findByCredentials = function (email, login, senha) {
     });
 };
 
-ModeradorSchema.pre('save', function (next) {
+ModeradorSchema.pre('save', function(next) {
     var Moderador = this;
 
     if (Moderador.isModified('senha')) {
@@ -100,7 +114,7 @@ ModeradorSchema.pre('save', function (next) {
                 Moderador.senha = hash;
                 next();
             })
-        }) 
+        })
 
     } else {
         next();

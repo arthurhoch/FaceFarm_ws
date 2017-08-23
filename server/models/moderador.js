@@ -37,7 +37,7 @@ const ModeradorSchema = new mongoose.Schema({
 ModeradorSchema.methods.generateAuthToken = function () {
     var Moderador = this;
 
-    var cert = fs.readFileSync('../keys/private.key');
+    var cert = fs.readFileSync('server/keys/private.key');
     var access = 'auth';
     var token = jwt.sign({_id: Moderador._id.toHexString(), access},
         cert, { algorithm: 'RS256'});
@@ -52,8 +52,8 @@ ModeradorSchema.methods.generateAuthToken = function () {
 ModeradorSchema.statics.findByToken = function (token) {
     var Moderador = this;
     var decoded;
-
-    var cert = fs.readFileSync('../keys/public.pem');
+    
+    var cert = fs.readFileSync('server/keys/public.pem');
 
     try {
         decoded = jwt.verify(token, cert, { algorithms: ['RS256'] });
@@ -68,10 +68,11 @@ ModeradorSchema.statics.findByToken = function (token) {
     });
 };
 
-ModeradorSchema.statics.findByCredentials = function (email, senha) {
+ModeradorSchema.statics.findByCredentials = function (email, login, senha) {
     var Moderador = this;
 
-    return Moderador.findOne({email}).then((moderador) => {
+    return Moderador.findOne({email, login}).then((moderador) => {
+        
         if (!moderador) {
             return Promise.reject();
         }
@@ -79,6 +80,7 @@ ModeradorSchema.statics.findByCredentials = function (email, senha) {
         return new Promise((resolve, reject) => {
             bcrypt.compare(senha, moderador.senha, (err, res) => {
                 if (res) {
+                    console.log(moderador);
                     resolve(moderador);
                 } else {
                     reject();

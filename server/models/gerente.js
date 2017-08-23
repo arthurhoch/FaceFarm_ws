@@ -35,35 +35,26 @@ GerenteSchema.methods.generateAuthToken = function() {
 
     var cert = fs.readFileSync('server/keys/private.key');
     var access = 'auth';
-    var token = jwt.sign({ _id: Gerente._id.toHexString() + 'azw', access },
+    var token = jwt.sign({ _id: Gerente._id.toHexString(), access },
         cert, { algorithm: 'RS256' });
 
+    let tokenGerente = Gerente.tokens.filter( (t) => {
+        if (t.access === 'auth') {
+            t.token = token;
+        }
 
-    // var foundToken = false;
-    // Gerente.tokens.forEach(function(token, key) {
-    //     if (token.access === 'auth') {
-    //         Gerente.tokens[key].access = access;
-    //         Gerente.tokens[key].token = token;
-
-    //         foundToken = true;
-    //     }
-    // });
-
-    let tokenGerente = Gerente.tokens.filter( (token) => {
-        token.access === 'auth';
+        return t.access === 'auth';
     });
-    tokenGerente.token = token;
 
+    console.log(tokenGerente.length);
+
+    if (tokenGerente.length === 0) {
+        Gerente.tokens.push({access, token});
+    }
 
     return Gerente.save().then(() => {
         return token;
     });
-    // if (!foundToken) {
-    //     Gerente.tokens.push({ access, token });
-    //     return Gerente.save().then(() => {
-    //         return token;
-    //     });
-    // }
 
     return Promise.resolve(token);
 };

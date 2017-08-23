@@ -94,7 +94,6 @@ ModeradorSchema.statics.findByCredentials = function(email, login, senha) {
         return new Promise((resolve, reject) => {
             bcrypt.compare(senha, moderador.senha, (err, res) => {
                 if (res) {
-                    console.log(moderador);
                     resolve(moderador);
                 } else {
                     reject();

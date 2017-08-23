@@ -52,7 +52,6 @@ const AgricultorSchema = new mongoose.Schema({
 
 AgricultorSchema.methods.generateAuthToken = function() {
     var Agricultor = this;
-    console.log("asdwasd")
 
     var cert = fs.readFileSync('server/keys/private.key');
     var access = 'auth';

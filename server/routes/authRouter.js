@@ -55,7 +55,6 @@ authRouter.route('/users').post((req, res) => {
             }
             
             return agricultor.generateAuthToken().then((token) => {
-                console.log(agricultor)
                 res.header('x-auth', token).send(agricultor);
             });
         }).catch((e) => {
@@ -63,32 +62,6 @@ authRouter.route('/users').post((req, res) => {
             return res.status(404).send();
         });
     });
-
-    // var body = _.pick(req.body, ['login', 'email', 'senha']);
-    // console.log(body);
-    // Agricultor.findByCredentials(body.email, body.login, body.senha).then((agricultor) => {
-    //     console.log(agricultor);
-    //     if (!agricultor) {
-    //         return res.status(404).send();
-    //     }
-    //     return agricultor.generateAuthToken().then((token) => {
-    //         console.log(agricultor);
-    //         res.header('x-auth', token).send(agricultor);
-    //     });
-    // }).catch((e) => {
-    //     Empresa.findByCredentials(body.email, body.login, body.senha).then((empresa) => {
-    //         if (!empresa) {
-    //             return res.status(404).send();
-    //         }
-
-    //         return empresa.generateAuthToken().then((token) => {
-    //             res.header('x-auth', token).send(empresa);
-    //         });
-    //     }).catch((e) => {
-    //         console.log(e);
-    //         return res.status(404).send();
-    //     });
-    // });
 });
 
 module.exports = { authRouter };

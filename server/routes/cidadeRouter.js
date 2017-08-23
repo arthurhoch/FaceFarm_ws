@@ -4,10 +4,11 @@ const cidadeController = require('../controllers/cidadeController');
 
 const cidadeRouter = express.Router();
 
-cidadeRouter.route('/create').post(cidadeController.create);
-cidadeRouter.route('/remove/:id').delete(cidadeController.remove);
-cidadeRouter.route('/update').patch(cidadeController.update);
-cidadeRouter.route('/getById/:id').get(cidadeController.getById);
-cidadeRouter.route('/getList').get(cidadeController.getList);
+cidadeRouter.route('/').post(cidadeController.create);
+cidadeRouter.route('/:id').delete(cidadeController.remove);
+cidadeRouter.route('/').patch(cidadeController.update);
+cidadeRouter.route('/:id').get(cidadeController.getById);
+cidadeRouter.route('/:skip/:limit').get(cidadeController.getList);
+cidadeRouter.route('/').get(cidadeController.count);
 
 module.exports = { cidadeRouter };

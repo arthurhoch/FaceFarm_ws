@@ -47,7 +47,8 @@ const update = (req, res) => {
 		return res.status(404).send()
 	}
 	
-	Agricultor.findByIdAndUpdate(id, {$set: agricultor}, {new: true}).then((agricultorEdited) => {
+	Agricultor.findByIdAndUpdate(id, {$set: agricultor}, {new: true})
+	.then((agricultorEdited) => {
 		if (!agricultorEdited) {
 			return res.status(404).send()
 		}
@@ -59,15 +60,28 @@ const update = (req, res) => {
 };
 
 const getList = (req, res) => {
-	Agricultor.find().then((agricultorList) => {
+	var limit = parseInt(req.params.limit, 10);
+	var skip = parseInt(req.params.skip, 10);
+
+	Agricultor.find().skip(skip).limit(limit)
+	.then((agricultorList) => {
 		return res.send({agricultorList})
 	}), (e) => {
 		return res.status(400).send(e)
 	}
 };
 
+const count = (req, res) => {
+	Agricultor.count({})
+	.then((counter) => {
+		return res.send({counter})
+	}), (e) => {
+		return res.status(400).send(e)
+	}
+};
+
 const getById = (req, res) => {
-	var id = req.params.id
+	var id = req.params.id;
 	if (!ObjectID.isValid(id)) {
 		return res.status(404).send()
 	}
@@ -85,5 +99,6 @@ module.exports = {
 	remove,
 	update,
 	getList,
+	count,
 	getById
 };

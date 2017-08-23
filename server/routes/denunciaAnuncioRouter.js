@@ -4,10 +4,11 @@ const denunciaAnuncioController = require('../controllers/denunciaAnuncioControl
 
 const denunciaAnuncioRouter = express.Router();
 
-denunciaAnuncioRouter.route('/create').post(denunciaAnuncioController.create);
-denunciaAnuncioRouter.route('/remove/:id').delete(denunciaAnuncioController.remove);
-denunciaAnuncioRouter.route('/update').patch(denunciaAnuncioController.update);
-denunciaAnuncioRouter.route('/getById/:id').get(denunciaAnuncioController.getById);
-denunciaAnuncioRouter.route('/getList').get(denunciaAnuncioController.getList);
+denunciaAnuncioRouter.route('/').post(denunciaAnuncioController.create);
+denunciaAnuncioRouter.route('/:id').delete(denunciaAnuncioController.remove);
+denunciaAnuncioRouter.route('/').patch(denunciaAnuncioController.update);
+denunciaAnuncioRouter.route('/:id').get(denunciaAnuncioController.getById);
+denunciaAnuncioRouter.route('/:skip/:limit').get(denunciaAnuncioController.getList);
+denunciaAnuncioRouter.route('/').get(denunciaAnuncioController.count);
 
 module.exports = { denunciaAnuncioRouter };

@@ -4,10 +4,11 @@ const gerenteController = require('../controllers/gerenteController');
 
 const gerenteRouter = express.Router();
 
-gerenteRouter.route('/create').post(gerenteController.create);
-gerenteRouter.route('/remove/:id').delete(gerenteController.remove);
-gerenteRouter.route('/update').patch(gerenteController.update);
-gerenteRouter.route('/getById/:id').get(gerenteController.getById);
-gerenteRouter.route('/getList').get(gerenteController.getList);
+gerenteRouter.route('/').post(gerenteController.create);
+gerenteRouter.route('/:id').delete(gerenteController.remove);
+gerenteRouter.route('/').patch(gerenteController.update);
+gerenteRouter.route('/:id').get(gerenteController.getById);
+gerenteRouter.route('/:skip/:limit').get(gerenteController.getList);
+gerenteRouter.route('/').get(gerenteController.count);
 
 module.exports = { gerenteRouter };

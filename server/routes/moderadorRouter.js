@@ -4,10 +4,11 @@ const moderadorController = require('../controllers/moderadorController');
 
 const moderadorRouter = express.Router();
 
-moderadorRouter.route('/create').post(moderadorController.create);
-moderadorRouter.route('/remove/:id').delete(moderadorController.remove);
-moderadorRouter.route('/update').patch(moderadorController.update);
-moderadorRouter.route('/getById/:id').get(moderadorController.getById);
-moderadorRouter.route('/getList').get(moderadorController.getList);
+moderadorRouter.route('/').post(moderadorController.create);
+moderadorRouter.route('/:id').delete(moderadorController.remove);
+moderadorRouter.route('/').patch(moderadorController.update);
+moderadorRouter.route('/:id').get(moderadorController.getById);
+moderadorRouter.route('/:skip/:limit').get(moderadorController.getList);
+moderadorRouter.route('/').get(moderadorController.count);
 
 module.exports = { moderadorRouter };

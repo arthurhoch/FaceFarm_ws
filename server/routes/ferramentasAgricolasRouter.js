@@ -4,10 +4,11 @@ const ferramentasAgricolasController = require('../controllers/ferramentasAgrico
 
 const ferramentasAgricolasRouter = express.Router();
 
-ferramentasAgricolasRouter.route('/create').post(ferramentasAgricolasController.create);
-ferramentasAgricolasRouter.route('/remove/:id').delete(ferramentasAgricolasController.remove);
-ferramentasAgricolasRouter.route('/update').patch(ferramentasAgricolasController.update);
-ferramentasAgricolasRouter.route('/getById/:id').get(ferramentasAgricolasController.getById);
-ferramentasAgricolasRouter.route('/getList').get(ferramentasAgricolasController.getList);
+ferramentasAgricolasRouter.route('/').post(ferramentasAgricolasController.create);
+ferramentasAgricolasRouter.route('/:id').delete(ferramentasAgricolasController.remove);
+ferramentasAgricolasRouter.route('/').patch(ferramentasAgricolasController.update);
+ferramentasAgricolasRouter.route('/:id').get(ferramentasAgricolasController.getById);
+ferramentasAgricolasRouter.route('/:skip/:limit').get(ferramentasAgricolasController.getList);
+ferramentasAgricolasRouter.route('/').get(ferramentasAgricolasController.count);
 
 module.exports = { ferramentasAgricolasRouter };

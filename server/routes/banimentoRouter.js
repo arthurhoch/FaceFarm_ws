@@ -4,10 +4,11 @@ const banimentoController = require('../controllers/banimentoController');
 
 const banimentoRouter = express.Router();
 
-banimentoRouter.route('/create').post(banimentoController.create);
-banimentoRouter.route('/remove/:id').delete(banimentoController.remove);
-banimentoRouter.route('/update').patch(banimentoController.update);
-banimentoRouter.route('/getById/:id').get(banimentoController.getById);
-banimentoRouter.route('/getList').get(banimentoController.getList);
+banimentoRouter.route('/').post(banimentoController.create);
+banimentoRouter.route('/:id').delete(banimentoController.remove);
+banimentoRouter.route('/').patch(banimentoController.update);
+banimentoRouter.route('/:id').get(banimentoController.getById);
+banimentoRouter.route('/:skip/:limit').get(banimentoController.getList);
+banimentoRouter.route('/').get(banimentoController.count);
 
 module.exports = { banimentoRouter };

@@ -60,6 +60,15 @@ const getList = (req, res) => {
 	}
 };
 
+const count = (req, res) => {
+	TipoPostagem.count({})
+	.then((counter) => {
+		return res.send({counter})
+	}), (e) => {
+		return res.status(400).send(e)
+	}
+};
+
 const getById = (req, res) => {
 	var id = req.params.id
 	if (!ObjectID.isValid(id)) {
@@ -79,5 +88,6 @@ module.exports = {
 	remove,
 	update,
 	getList,
+	count,
 	getById
 };

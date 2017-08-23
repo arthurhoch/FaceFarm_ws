@@ -4,10 +4,11 @@ const entropiaAnuncioController = require('../controllers/entropiaAnuncioControl
 
 const entropiaAnuncioRouter = express.Router();
 
-entropiaAnuncioRouter.route('/create').post(entropiaAnuncioController.create);
-entropiaAnuncioRouter.route('/remove/:id').delete(entropiaAnuncioController.remove);
-entropiaAnuncioRouter.route('/update').patch(entropiaAnuncioController.update);
-entropiaAnuncioRouter.route('/getById/:id').get(entropiaAnuncioController.getById);
-entropiaAnuncioRouter.route('/getList').get(entropiaAnuncioController.getList);
+entropiaAnuncioRouter.route('/').post(entropiaAnuncioController.create);
+entropiaAnuncioRouter.route('/:id').delete(entropiaAnuncioController.remove);
+entropiaAnuncioRouter.route('/').patch(entropiaAnuncioController.update);
+entropiaAnuncioRouter.route('/:id').get(entropiaAnuncioController.getById);
+entropiaAnuncioRouter.route('/:skip/:limit').get(entropiaAnuncioController.getList);
+entropiaAnuncioRouter.route('/').get(entropiaAnuncioController.count);
 
 module.exports = { entropiaAnuncioRouter };

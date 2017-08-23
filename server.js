@@ -32,7 +32,6 @@ const { tipoPostagemRouter } = require('./server/routes/tipoPostagemRouter');
 var app = express();
 app.use(bodyParser.json());
 
-
 app.use('/agricultor', agricultorRouter);
 app.use('/anuncio', anuncioRouter);
 app.use('/banimento', banimentoRouter);

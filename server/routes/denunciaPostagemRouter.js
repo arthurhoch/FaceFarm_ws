@@ -4,10 +4,11 @@ const denunciaPostagemController = require('../controllers/denunciaPostagemContr
 
 const denunciaPostagemRouter = express.Router();
 
-denunciaPostagemRouter.route('/create').post(denunciaPostagemController.create);
-denunciaPostagemRouter.route('/remove/:id').delete(denunciaPostagemController.remove);
-denunciaPostagemRouter.route('/update').patch(denunciaPostagemController.update);
-denunciaPostagemRouter.route('/getById/:id').get(denunciaPostagemController.getById);
-denunciaPostagemRouter.route('/getList').get(denunciaPostagemController.getList);
+denunciaPostagemRouter.route('/').post(denunciaPostagemController.create);
+denunciaPostagemRouter.route('/:id').delete(denunciaPostagemController.remove);
+denunciaPostagemRouter.route('/').patch(denunciaPostagemController.update);
+denunciaPostagemRouter.route('/:id').get(denunciaPostagemController.getById);
+denunciaPostagemRouter.route('/:skip/:limit').get(denunciaPostagemController.getList);
+denunciaPostagemRouter.route('/').get(denunciaPostagemController.count);
 
 module.exports = { denunciaPostagemRouter };

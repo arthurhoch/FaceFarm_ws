@@ -4,10 +4,11 @@ const planoAnuncioController = require('../controllers/planoAnuncioController');
 
 const planoAnuncioRouter = express.Router();
 
-planoAnuncioRouter.route('/create').post(planoAnuncioController.create);
-planoAnuncioRouter.route('/remove/:id').delete(planoAnuncioController.remove);
-planoAnuncioRouter.route('/update').patch(planoAnuncioController.update);
-planoAnuncioRouter.route('/getById/:id').get(planoAnuncioController.getById);
-planoAnuncioRouter.route('/getList').get(planoAnuncioController.getList);
+planoAnuncioRouter.route('/').post(planoAnuncioController.create);
+planoAnuncioRouter.route('/:id').delete(planoAnuncioController.remove);
+planoAnuncioRouter.route('/').patch(planoAnuncioController.update);
+planoAnuncioRouter.route('/:id').get(planoAnuncioController.getById);
+planoAnuncioRouter.route('/:skip/:limit').get(planoAnuncioController.getList);
+planoAnuncioRouter.route('/').get(planoAnuncioController.count);
 
 module.exports = { planoAnuncioRouter };

@@ -98,7 +98,14 @@ AgricultorSchema.statics.findByToken = function(token) {
 AgricultorSchema.statics.findByCredentials = function(email, login, senha) {
     var Agricultor = this;
 
-    return Agricultor.findOne({ email, login }).then((agricultor) => {
+    let data;
+    if (login) {
+        data = {login};
+    }else{
+        data = {email};
+    }
+
+    return Agricultor.findOne(data).then((agricultor) => {
         
         if (!agricultor) {
             return Promise.reject();

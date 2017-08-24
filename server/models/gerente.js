@@ -76,9 +76,16 @@ GerenteSchema.statics.findByToken = function(token) {
 };
 
 GerenteSchema.statics.findByCredentials = function(email, login, senha) {
-    var Gerente = this;
+    let Gerente = this;
 
-    return Gerente.findOne({ email, login }).then((gerente) => {
+    let data;
+    if (login) {
+        data = {login};
+    }else{
+        data = {email};
+    }
+
+    return Gerente.findOne(data).then((gerente) => {
         
         if (!gerente) {
             return Promise.reject();

@@ -85,7 +85,14 @@ ModeradorSchema.statics.findByToken = function(token) {
 ModeradorSchema.statics.findByCredentials = function(email, login, senha) {
     var Moderador = this;
 
-    return Moderador.findOne({ email, login }).then((moderador) => {
+    let data;
+    if (login) {
+        data = {login};
+    }else{
+        data = {email};
+    }
+
+    return Moderador.findOne(data).then((moderador) => {
 
         if (!moderador) {
             return Promise.reject();

@@ -94,9 +94,17 @@ EmpresaSchema.statics.findByToken = function(token) {
 };
 
 EmpresaSchema.statics.findByCredentials = function(email, login, senha) {
-    var Empresa = this;
+    let Empresa = this;
 
-    return Empresa.findOne({ email, login }).then((empresa) => {
+    let data;
+    if (login) {
+        data = {login};
+    }else{
+        data = {email};
+    }
+
+
+    return Empresa.findOne(data).then((empresa) => {
         if (!empresa) {
             return Promise.reject();
         }

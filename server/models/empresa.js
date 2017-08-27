@@ -51,7 +51,7 @@ const EmpresaSchema = new mongoose.Schema({
 EmpresaSchema.methods.generateAuthToken = function() {
     var Empresa = this;
 
-    var cert = fs.readFileSync('server/keys/private.key');
+    var cert = fs.readFileSync('server/keys/empresa.private_key.pem');
     var access = 'auth';
     var token = jwt.sign({ _id: Empresa._id.toHexString(), access },
         cert, { algorithm: 'RS256' });
@@ -78,7 +78,7 @@ EmpresaSchema.statics.findByToken = function(token) {
     var Empresa = this;
     var decoded;
 
-    var cert = fs.readFileSync('server/keys/public.pem');
+    var cert = fs.readFileSync('server/keys/empresa.public_key.pem');
 
     try {
         decoded = jwt.verify(token, cert, { algorithms: ['RS256'] });

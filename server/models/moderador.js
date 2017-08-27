@@ -40,7 +40,7 @@ const ModeradorSchema = new mongoose.Schema({
 ModeradorSchema.methods.generateAuthToken = function() {
     var Moderador = this;
 
-    var cert = fs.readFileSync('server/keys/private.key');
+    var cert = fs.readFileSync('server/keys/moderador.private_key.pem');
     var access = 'auth';
     var token = jwt.sign({ _id: Moderador._id.toHexString(), access },
         cert, { algorithm: 'RS256' });
@@ -67,7 +67,7 @@ ModeradorSchema.statics.findByToken = function(token) {
     var Moderador = this;
     var decoded;
 
-    var cert = fs.readFileSync('server/keys/public.pem');
+    var cert = fs.readFileSync('server/keys/moderador.public_key.pem');
 
     try {
         decoded = jwt.verify(token, cert, { algorithms: ['RS256'] });

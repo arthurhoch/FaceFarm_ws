@@ -53,7 +53,7 @@ const AgricultorSchema = new mongoose.Schema({
 AgricultorSchema.methods.generateAuthToken = function() {
     var Agricultor = this;
 
-    var cert = fs.readFileSync('server/keys/private.key');
+    var cert = fs.readFileSync('server/keys/agricultor.private_key.pem');
     var access = 'auth';
     var token = jwt.sign({ _id: Agricultor._id.toHexString(), access },
         cert, { algorithm: 'RS256' });
@@ -80,7 +80,7 @@ AgricultorSchema.statics.findByToken = function(token) {
     var Agricultor = this;
     var decoded;
 
-    var cert = fs.readFileSync('server/keys/public.pem');
+    var cert = fs.readFileSync('server/keys/agricultor.public_key.pem');
 
     try {
         decoded = jwt.verify(token, cert, { algorithms: ['RS256'] });

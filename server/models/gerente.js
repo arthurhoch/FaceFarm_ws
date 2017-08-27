@@ -33,7 +33,7 @@ const GerenteSchema = new mongoose.Schema({
 GerenteSchema.methods.generateAuthToken = function() {
     var Gerente = this;
 
-    var cert = fs.readFileSync('server/keys/private.key');
+    var cert = fs.readFileSync('server/keys/gerente.private_key.pem');
     var access = 'auth';
     var token = jwt.sign({ _id: Gerente._id.toHexString(), access },
         cert, { algorithm: 'RS256' });
@@ -60,7 +60,7 @@ GerenteSchema.statics.findByToken = function(token) {
     var Gerente = this;
     var decoded;
 
-    var cert = fs.readFileSync('server/keys/public.pem');
+    var cert = fs.readFileSync('server/keys/gerente.public_key.pem');
 
     try {
         decoded = jwt.verify(token, cert, { algorithms: ['RS256'] });

@@ -4,9 +4,13 @@ const mongoose = require('mongoose');
 const FerramentasAgricolasSchema = new mongoose.Schema({
     nome: { type: String, required: true },
     descricao: { type: String, required: false, },
-    dataCadastro: {    type: Date, default: Date.now },
+    dataCadastro: { type: Date, default: Date.now },
     exibirPublico: { type: Boolean, default: false },
-    listaImagen: [mongoose.Schema.ObjectId]
+    listaImagen: [mongoose.Schema.ObjectId],
+    _agricultor: {
+        type: mongoose.Schema.ObjectId,
+        required: true
+    }
 });
 
 const FerramentasAgricolas = mongoose.model(('FerramentasAgricolas'), FerramentasAgricolasSchema);

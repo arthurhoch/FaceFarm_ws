@@ -34,7 +34,6 @@ const AgricultorSchema = new mongoose.Schema({
     listaPostage: [mongoose.Schema.ObjectId],
     listaComentarios: [mongoose.Schema.ObjectId],
     listaImagen: [mongoose.Schema.ObjectId],
-    listaFerramenta: [mongoose.Schema.ObjectId],
     listaCidade: [mongoose.Schema.ObjectId],
     listaBanimento: [mongoose.Schema.ObjectId],
     listaNotificacao: [mongoose.Schema.ObjectId],

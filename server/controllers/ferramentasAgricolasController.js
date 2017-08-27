@@ -4,10 +4,18 @@ const { FerramentasAgricolas } = require('../models/ferramentasAgricolas');
 const { ObjectID } = require('mongodb')
 
 const create = (req, res) => {
+
+	agricultorId = req.agricultor._id;
+
+	if (!ObjectID.isValid(agricultorId)) {
+        return res.status(404).send("Id is not valid");
+    }
+
 	var body = _.pick(req.body, ['nome', 'descricao', 'dataCadastro', 
 	'exibirPublico', 'listaImagen']);
 
-    var ferramentasAgricolas = new FerramentasAgricolas(body)
+	var ferramentasAgricolas = new FerramentasAgricolas(body);
+	ferramentasAgricolas._agricultor = agricultorId;
 
     ferramentasAgricolas.save().then((doc) => {
         return res.send(doc)
@@ -18,12 +26,16 @@ const create = (req, res) => {
 
 const remove = (req, res) => {
 	var id = req.params.id
-
+	var agricultorId = req.agricultor._id;
+	
 	if (!ObjectID.isValid(id)) {
 		return res.status(404).send()
 	}
 
-	FerramentasAgricolas.findByIdAndRemove(id).then((ferramentasAgricolas) => {
+	FerramentasAgricolas.findOneAndRemove({
+		_agricultor: agricultorId,
+		_id: id
+	}).then((ferramentasAgricolas) => {
 		if (!ferramentasAgricolas) {
 			return res.status(404).send()
 		}
@@ -32,7 +44,7 @@ const remove = (req, res) => {
 };
 
 const update = (req, res) => {
-	var body = _.pick(req.body, ['nome', 'descricao', 'dataCadastro', 
+	var body = _.pick(req.body, ['_id', 'nome', 'descricao', 'dataCadastro', 
 	'exibirPublico', 'listaImagen']);
 
 	var ferramentasAgricolas = new FerramentasAgricolas(body)
@@ -43,7 +55,9 @@ const update = (req, res) => {
 		return res.status(404).send()
 	}
 
-	FerramentasAgricolas.findByIdAndUpdate(id, {$set: ferramentasAgricolas}, {new: true}).then((ferramentasAgricolasEdited) => {
+	var agricultorId = req.agricultor._id;
+
+	FerramentasAgricolas.update({_agricultor: agricultorId, _id: id}, {$set: ferramentasAgricolas}, {new: true}).then((ferramentasAgricolasEdited) => {
 		if (!ferramentasAgricolasEdited) {
 			return res.status(404).send()
 		}
@@ -55,7 +69,9 @@ const update = (req, res) => {
 };
 
 const getList = (req, res) => {
-	FerramentasAgricolas.find().then((ferramentasAgricolasList) => {
+	FerramentasAgricolas.find({
+		_agricultor: req.agricultor._id
+	}).then((ferramentasAgricolasList) => {
 		return res.send({ferramentasAgricolasList})
 	}), (e) => {
 		return res.status(400).send(e)

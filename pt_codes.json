@@ -10,22 +10,22 @@
         "MSG": "Usuário seguido com sucesso."
     },
     "ERROR_ID_INVALIDO": {
-        "TYPE": "SUCCESS",
+        "TYPE": "ERROR",
         "COD": "ERROR_ID_INVALIDO",
         "MSG": "Id não é válido."
     },
-    "ERRO_CONEXAO_GOOGLE": {
-        "TYPE": "ERRO",
+    "ERROR_CONEXAO_GOOGLE": {
+        "TYPE": "ERROR",
         "COD": "ERRO_CONEXAO_GOOGLE",
         "MSG": "Não foi possivel pegar a localização no serviço do Google."
     },
-    "ERRO_ENDERECO_INVALIDO": {
-        "TYPE": "ERRO",
+    "ERROR_ENDERECO_INVALIDO": {
+        "TYPE": "ERROR",
         "COD": "ERRO_ENDERECO_INVALIDO",
         "MSG": "Não foi possivel encontrar o endereço."
     },
-    "ERRO_CONNECT_FORECAST": {
-        "TYPE": "ERRO",
+    "ERROR_CONNECT_FORECAST": {
+        "TYPE": "ERROR",
         "COD": "ERRO_CONNECT_FORECAST",
         "MSG": "Não foi possivel comunicar com o serviço de clima."
     }

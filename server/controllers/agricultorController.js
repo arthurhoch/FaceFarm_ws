@@ -2,6 +2,7 @@ const _ = require('lodash');
 
 const { Agricultor } = require('../models/agricultor');
 const { Seguindo } = require('../models/seguindo');
+const { Seguidores } = require('../models/seguidores');
 const { ObjectID } = require('mongodb')
 
 const create = (req, res) => {
@@ -98,25 +99,35 @@ const getById = (req, res) => {
 };
 
 const seguir = (req, res) => {
-
     var agricultorId = req.agricultor._id;
     var body = _.pick(req.body, ['id']);
-    var id_novo_seguidor = body.id;
-    if (!ObjectID.isValid(id_novo_seguidor)) {
+    var id_seguindo = body.id;
+
+    if (!ObjectID.isValid(id_seguindo)) {
         return res.status(404).send({ cod: "ERROR_ID_INVALIDO" });
     }
 
-    var conditions = {
-        _id: agricultorId,
-        seguindoList: { $ne: id_novo_seguidor }
-    };
-
-    Seguindo.findOneAndUpdate(conditions, { $push: { seguindoList: id_novo_seguidor } }, { upsert: true, new: true }).then((seguindo) => {
-        return res.send({ cod: "SUCCESS_SEGUINDO" });
-    }).catch((e) => {
-        res.status(400).send({ cod: "INFO_SEGUIDOR_EXISTE" })
+    Seguindo.seguir(agricultorId, id_seguindo).then(() => {
+        Seguidores.adicionarSeguidor(id_seguindo, agricultorId).then(() => {
+            return res.send({ cod: "SUCCESS_SEGUINDO" });
+        }).catch(() => {
+            return res.status(400).send({ cod: "ERROR_ADICIONAR_SEGUIDOR" })
+        });
+    }).catch(() => {
+        return res.status(400).send({ cod: "INFO_SEGUIDOR_EXISTE" })
     });
 };
+
+const getListSeguidores = (req, res) => {
+    var agricultorId = req.agricultor._id;
+
+    let query = {
+
+    }
+
+    Seguidores.find
+
+}
 
 module.exports = {
     create,

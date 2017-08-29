@@ -1,0 +1,17 @@
+{
+    "INFO_SEGUIDOR_EXISTE": {
+        "tipo": "INFO",
+        "cod": "INFO_SEGUIDOR_EXISTE",
+        "msg": "Você já está seguindo esse usuário."
+    },
+    "SUCCESS_SEGUINDO": {
+        "tipo": "SUCCESS",
+        "cod": "SUCCESS_SEGUINDO",
+        "msg": "Usuário seguido com sucesso."
+    },
+    "ERROR_ID_INVALIDO": {
+        "tipo": "SUCCESS",
+        "cod": "ERROR_ID_INVALIDO",
+        "msg": "Id não é válido."
+    }
+}

@@ -30,7 +30,7 @@ const EmpresaSchema = new mongoose.Schema({
     configuracao: mongoose.Schema.ObjectId,
     listaDenunciaUsuario: [mongoose.Schema.ObjectId],
     listaCultura: [mongoose.Schema.ObjectId],
-    listaPostage: [mongoose.Schema.ObjectId],
+    listaPostagem: [mongoose.Schema.ObjectId],
     listaComentarios: [mongoose.Schema.ObjectId],
     listaImagen: [mongoose.Schema.ObjectId],
     listaCidade: [mongoose.Schema.ObjectId],

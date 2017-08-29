@@ -7,7 +7,6 @@ var verifyAgricultor = (req, res, next) => {
         if (!agricultor) {
             return Promise.reject();
         }
-
         req.agricultor = agricultor;
         req.token = token;
         next();

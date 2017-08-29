@@ -13,7 +13,7 @@ agricultorRouter.route('/:id').get(verifyAgricultor, agricultorController.getByI
 agricultorRouter.route('/:skip/:limit').get(agricultorController.getList);
 agricultorRouter.route('/').get(agricultorController.count);
 agricultorRouter.route('/seguir').post(verifyAgricultor, agricultorController.seguir);
-// agricultorRouter.route('/followers').get(verifyAgricultor, agricultorController.count);
+agricultorRouter.route('/seguidores').get(verifyAgricultor, agricultorController.getListSeguidores);
 // agricultorRouter.route('/seguindo').get(verifyAgricultor, agricultorController.count);
 // agricultorRouter.route('/unfollow/:id').post(verifyAgricultor, agricultorController.count);
 

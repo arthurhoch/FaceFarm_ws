@@ -113,7 +113,7 @@ const seguir = (req, res) => {
         }).catch(() => {
             return res.status(400).send({ cod: "ERROR_ADICIONAR_SEGUIDOR" })
         });
-    }).catch(() => {
+    }).catch((e) => {
         return res.status(400).send({ cod: "INFO_SEGUIDOR_EXISTE" })
     });
 };
@@ -122,10 +122,17 @@ const getListSeguidores = (req, res) => {
     var agricultorId = req.agricultor._id;
 
     let query = {
-
+        _id: agricultorId
     }
 
-    Seguidores.find
+    Seguidores.find(query).then(() => {
+        if (seguidoresList) {
+            return res.send(seguidoresList);
+        }
+        return res.status(400).send({ cod: "INFO_NAO_POSSUI_SEGUIDORES" })
+    }).catch((e) => {
+        return res.status(400).send({ cod: "ERROR_OBTER_SEGUIDORES" })
+    })
 
 }
 

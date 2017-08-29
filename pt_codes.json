@@ -1,17 +1,32 @@
 {
     "INFO_SEGUIDOR_EXISTE": {
-        "tipo": "INFO",
-        "cod": "INFO_SEGUIDOR_EXISTE",
-        "msg": "Você já está seguindo esse usuário."
+        "TYPE": "INFO",
+        "COD": "INFO_SEGUIDOR_EXISTE",
+        "MSG": "Você já está seguindo esse usuário."
     },
     "SUCCESS_SEGUINDO": {
-        "tipo": "SUCCESS",
-        "cod": "SUCCESS_SEGUINDO",
-        "msg": "Usuário seguido com sucesso."
+        "TYPE": "SUCCESS",
+        "COD": "SUCCESS_SEGUINDO",
+        "MSG": "Usuário seguido com sucesso."
     },
     "ERROR_ID_INVALIDO": {
-        "tipo": "SUCCESS",
-        "cod": "ERROR_ID_INVALIDO",
-        "msg": "Id não é válido."
+        "TYPE": "SUCCESS",
+        "COD": "ERROR_ID_INVALIDO",
+        "MSG": "Id não é válido."
+    },
+    "ERRO_CONEXAO_GOOGLE": {
+        "TYPE": "ERRO",
+        "COD": "ERRO_CONEXAO_GOOGLE",
+        "MSG": "Não foi possivel pegar a localização no serviço do Google."
+    },
+    "ERRO_ENDERECO_INVALIDO": {
+        "TYPE": "ERRO",
+        "COD": "ERRO_ENDERECO_INVALIDO",
+        "MSG": "Não foi possivel encontrar o endereço."
+    },
+    "ERRO_CONNECT_FORECAST": {
+        "TYPE": "ERRO",
+        "COD": "ERRO_CONNECT_FORECAST",
+        "MSG": "Não foi possivel comunicar com o serviço de clima."
     }
 }

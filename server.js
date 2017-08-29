@@ -29,6 +29,7 @@ const { planoAnuncioRouter } = require('./server/routes/planoAnuncioRouter');
 const { postagemRouter } = require('./server/routes/postagemRouter');
 const { tipoPostagemRouter } = require('./server/routes/tipoPostagemRouter');
 const { weatherRouter } = require('./server/routes/weatherRouter');
+const { currencyRouter } = require('./server/routes/currencyRouter');
 const { authRouter } = require('./server/routes/authRouter');
 
 var app = express();
@@ -56,6 +57,7 @@ app.use('/planoAnuncio', planoAnuncioRouter);
 app.use('/postagem', postagemRouter);
 app.use('/tipoPostagem', tipoPostagemRouter);
 app.use('/weather', weatherRouter);
+app.use('/currency', currencyRouter);
 app.use('/auth', authRouter);
 
 app.listen(process.env.PORT, () => {

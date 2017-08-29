@@ -38,5 +38,10 @@
         "TYPE": "ERROR",
         "COD": "INFO_NAO_POSSUI_SEGUIDORES",
         "MSG": "Erro ao tentar obter seguidores."
+    },
+    "ERROR_CONNECT_FIXER": {
+        "TYPE": "ERROR",
+        "COD": "ERROR_CONNECT_FIXER",
+        "MSG": "Não foi possivel conectar ao serviço de cotação."
     }
 }

@@ -8,12 +8,10 @@ const getInfoWeather = (req, res) => {
 	geocodeAddress(body.endereco, (errorCode, results) => {
 		if (errorCode) {
 			return res.status(500).send({cod: errorCode});
-			console.log(errorCode);
 		} else {
 			getWeather(results.latitude, results.longitude, (errorCode, weatherResult) => {
 				if (errorCode) {
 					return res.status(500).send({cod: errorCode});
-					console.log(errorCode);
 				} else {
 					return res.send(weatherResult);
 				}

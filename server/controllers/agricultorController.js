@@ -1,8 +1,9 @@
 const _ = require('lodash');
 
 const { Agricultor } = require('../models/agricultor');
-const { Seguindo } = require('../models/seguindo');
-const { Seguidores } = require('../models/seguidores');
+const { Empresa } = require('../models/empresa');
+const { Followers } = require('../models/followers');
+const { Following } = require('../models/following');
 const { ObjectID } = require('mongodb')
 
 const create = (req, res) => {
@@ -98,43 +99,110 @@ const getById = (req, res) => {
     }).catch((e) => res.status(400).send());
 };
 
-const seguir = (req, res) => {
-    var agricultorId = req.agricultor._id;
-    var body = _.pick(req.body, ['id']);
-    var id_seguindo = body.id;
+const follow = (req, res) => {
+    let agricultorId = req.agricultor._id;
+    let body = _.pick(req.body, ['id']);
+    let id_seguindo = body.id;
 
     if (!ObjectID.isValid(id_seguindo)) {
         return res.status(404).send({ cod: "ERROR_ID_INVALIDO" });
     }
 
-    Seguindo.seguir(agricultorId, id_seguindo).then(() => {
-        Seguidores.adicionarSeguidor(id_seguindo, agricultorId).then(() => {
-            return res.send({ cod: "SUCCESS_SEGUINDO" });
-        }).catch(() => {
-            return res.status(400).send({ cod: "ERROR_ADICIONAR_SEGUIDOR" })
-        });
-    }).catch((e) => {
-        return res.status(400).send({ cod: "INFO_SEGUIDOR_EXISTE" })
-    });
+    Empresa.where({ _id: id_seguindo }).count().then((count) => {
+        if (count > 0) {
+            Following.followUser(agricultorId, id_seguindo, 'followingListEmpresa').then((following) => {
+                Followers.addFollower(id_seguindo, agricultorId, 'followersListAgricultor').then((follower) => {
+                    return res.send({ cod: "SUCCESS_SEGUINDO" });
+                }).catch((e) => { return res.status(400).send({ cod: "ERROR_ADICIONAR_SEGUIDORES" }) });
+            }).catch((e) => {
+                if (e.codeName === 'DuplicateKey') {
+                    return res.status(400).send({ cod: "INFO_JA_ESTA_SEGUINDO" })
+                } else {
+                    console.log(e)
+                    return res.status(400).send({ cod: "ERROR_SEGUIR" })
+                }
+            });
+        }
+        Agricultor.where({ _id: id_seguindo }).count().then((count) => {
+            if (count > 0) {
+                Following.followUser(agricultorId, id_seguindo, 'followingListAgricultor').then((following) => {
+                    Followers.addFollower(id_seguindo, agricultorId, 'followersListEmpresa').then((follower) => {
+                        return res.send({ cod: "SUCCESS_SEGUINDO" });
+                    }).catch(() => { return res.status(400).send({ cod: "ERROR_ADICIONAR_SEGUIDORES" }) });
+                }).catch((e) => {
+                    if (e.codeName === 'DuplicateKey') {
+                        return res.status(400).send({ cod: "INFO_JA_ESTA_SEGUINDO" })
+                    } else {
+                        console.log(e)
+                        return res.status(400).send({ cod: "ERROR_SEGUIR" })
+                    }
+                });
+            }
+        }).catch((e) => { return res.status(404).send({ cod: 'ERROR_PROCURAR_USUARIO' }) });
+    }).catch((e) => { return res.status(400).send({ cod: 'ERROR_PROCURAR_USUARIO' }) });
 };
 
-const getListSeguidores = (req, res) => {
-    var agricultorId = req.agricultor._id;
+const unfollow = (req, res) => {
+    let agricultorId = req.agricultor._id;
+    let body = _.pick(req.body, ['id']);
+    let id_seguindo = body.id;
 
-    let query = {
-        _id: agricultorId
+    if (!ObjectID.isValid(id_seguindo)) {
+        return res.status(404).send({ cod: "ERROR_ID_INVALIDO" });
     }
 
-    Seguidores.find(query).then(() => {
-        if (seguidoresList) {
-            return res.send(seguidoresList);
+    Empresa.where({ _id: id_seguindo }).count().then((count) => {
+        if (count > 0) {
+            Following.unfollowUser(agricultorId, id_seguindo, 'followingListEmpresa').then((following) => {
+                Followers.removeFollower(id_seguindo, agricultorId, 'followersListAgricultor').then((follower) => {
+                    if (follower) {
+                        return res.send({ cod: "SUCCESS_UNFOLLOW"});
+                    }
+                    return res.send({ cod: "INFO_USUARIO_NAO_ENCONTRADO"});
+                }).catch((e) => { return res.status(400).send({ cod: "ERROR_UNFOLLOW" + e }) });
+            }).catch((e) => {
+                console.log(e)
+                return res.status(400).send({ cod: "ERROR_UNFOLLOW" })
+            });
         }
-        return res.status(400).send({ cod: "INFO_NAO_POSSUI_SEGUIDORES" })
-    }).catch((e) => {
-        return res.status(400).send({ cod: "ERROR_OBTER_SEGUIDORES" })
-    })
-
+        Agricultor.where({ _id: id_seguindo }).count().then((count) => {
+            if (count > 0) {
+                Following.unfollowUser(agricultorId, id_seguindo, 'followingListAgricultor').then((following) => {
+                    Followers.removeFollower(id_seguindo, agricultorId, 'followersListEmpresa').then((follower) => {
+                        if (follower) {
+                            return res.send({ cod: "SUCCESS_UNFOLLOW"});
+                        }
+                        return res.send({ cod: "INFO_USUARIO_NAO_ENCONTRADO"});
+                    }).catch((e) => { return res.status(400).send({ cod: "ERROR_UNFOLLOW" + e }) });
+                }).catch((e) => {
+                    return res.status(400).send({ cod: "ERROR_UNFOLLOW" })
+                });
+            }
+        }).catch((e) => { return res.status(404).send({ cod: 'ERROR_PROCURAR_USUARIO' }) });
+    }).catch((e) => { return res.status(400).send({ cod: 'ERROR_PROCURAR_USUARIO' }) });
 }
+
+const getListFollowing = (req, res) => {
+    let agricultorId = req.agricultor._id;
+
+    Following.findById(agricultorId)
+        .populate('followingListAgricultor', 'nomeCompleto')
+        .populate('followingListEmpresa', 'nomeCompleto')
+        .exec().then((listSeguindo) => {
+            return res.send(listSeguindo);
+        }).catch((e) => res.status(400).send({ cod: 'ERROR_OBTER_LISTA_SEGUINDO' } + e));
+};
+
+const getListFollowers = (req, res) => {
+    let agricultorId = req.agricultor._id;
+
+    Followers.findById(agricultorId)
+        .populate('followersListAgricultor', 'nomeCompleto')
+        .populate('followersListEmpresa', 'nomeCompleto')
+        .exec().then((listSeguidores) => {
+            return res.send(listSeguidores);
+        }).catch((e) => res.status(400).send({ cod: 'ERROR_OBTER_LISTA_SEGUINDO' } + e));
+};
 
 module.exports = {
     create,
@@ -143,5 +211,8 @@ module.exports = {
     getList,
     count,
     getById,
-    seguir
+    follow,
+    unfollow,
+    getListFollowers,
+    getListFollowing
 };

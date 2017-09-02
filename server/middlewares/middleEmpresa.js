@@ -12,7 +12,7 @@ var verifyEmpresa = (req, res, next) => {
         req.token = token;
         next();
     }).catch((e) => {
-        res.status(401).send()
+        res.status(401).send({ cod: 'INFO_USUARIO_NAO_AUTORIZADO' })
     });
 };
 

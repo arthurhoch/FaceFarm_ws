@@ -88,5 +88,10 @@
         "TYPE": "ERROR",
         "COD": "ERROR_CONNECT_FIXER",
         "MSG": "Não foi possivel conectar ao serviço de cotação."
+    },
+    "ERROR_POSTAGEM_NOT_EXIST": {
+        "TYPE": "ERROR",
+        "COD": "ERROR_POSTAGEM_NOT_EXIST",
+        "MSG": "Não foi possivel encontrar uma postagem com esse id."
     }
 }

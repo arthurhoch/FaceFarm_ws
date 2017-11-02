@@ -9,3 +9,4 @@ const CidadeSchema = new mongoose.Schema({
 const Cidade = mongoose.model(('Cidade'), CidadeSchema);
 
 module.exports = { Cidade }
+

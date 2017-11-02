@@ -49,7 +49,7 @@ const AgricultorSchema = new mongoose.Schema({
     }]
 });
 
-AgricultorSchema.methods.generateAuthToken = function() {
+AgricultorSchema.methods.generateAuthToken = function () {
     var Agricultor = this;
 
     var cert = fs.readFileSync('server/keys/agricultor.private_key.pem');
@@ -75,7 +75,7 @@ AgricultorSchema.methods.generateAuthToken = function() {
     });
 };
 
-AgricultorSchema.statics.findByToken = function(token) {
+AgricultorSchema.statics.findByToken = function (token) {
     var Agricultor = this;
     var decoded;
 
@@ -94,18 +94,27 @@ AgricultorSchema.statics.findByToken = function(token) {
     });
 };
 
-AgricultorSchema.statics.findByCredentials = function(email, login, senha) {
+AgricultorSchema.statics.findByCredentials = function (email, login, senha) {
     var Agricultor = this;
 
     let data;
     if (login) {
-        data = {login};
-    }else{
-        data = {email};
+        data = { login };
+    } else {
+        data = { email };
     }
 
-    return Agricultor.findOne(data).then((agricultor) => {
-        
+    let query = {
+        _id: 1,
+        bloqueado: 1,
+        email: 1,
+        nomeCompleto: 1,
+        tokens: 1,
+        senha: 1
+    }
+
+    return Agricultor.findOne(data, query).then((agricultor) => {
+
         if (!agricultor) {
             return Promise.reject();
         }
@@ -122,7 +131,7 @@ AgricultorSchema.statics.findByCredentials = function(email, login, senha) {
     });
 };
 
-AgricultorSchema.pre('save', function(next) {
+AgricultorSchema.pre('save', function (next) {
     var Agricultor = this;
 
     if (Agricultor.isModified('senha')) {

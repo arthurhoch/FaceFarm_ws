@@ -33,7 +33,15 @@ const { currencyRouter } = require('./server/routes/currencyRouter');
 const { authRouter } = require('./server/routes/authRouter');
 
 var app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    console.log(req.body);
+    next();
+});
 
 app.use('/agricultor', agricultorRouter);
 app.use('/anuncio', anuncioRouter);

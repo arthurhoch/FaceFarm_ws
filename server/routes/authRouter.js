@@ -15,7 +15,7 @@ authRouter.route('/admins').post((req, res) => {
     Moderador.findByCredentials(body.email, body.login, body.senha).then((moderador) => {
 
         if (!moderador) {
-            return res.status(404).send();
+            return res.status(401).send();
         }
 
         return moderador.generateAuthToken().then((token) => {
@@ -24,7 +24,7 @@ authRouter.route('/admins').post((req, res) => {
     }).catch((e) => {
         Gerente.findByCredentials(body.email, body.login, body.senha).then((gerente) => {
             if (!gerente) {
-                return res.status(404).send();
+                return res.status(401).send();
             }
 
             return gerente.generateAuthToken().then((token) => {
@@ -32,7 +32,7 @@ authRouter.route('/admins').post((req, res) => {
             });
         }).catch((e) => {
             console.log(e);
-            return res.status(404).send();
+            return res.status(401).send();
         });
     });
 });
@@ -42,7 +42,7 @@ authRouter.route('/users').post((req, res) => {
 
     Empresa.findByCredentials(body.email, body.login, body.senha).then((empresa) => {
         if (!empresa) {
-            return res.status(404).send();
+            return res.status(401).send();
         }
 
         return empresa.generateAuthToken().then((token) => {
@@ -51,15 +51,25 @@ authRouter.route('/users').post((req, res) => {
     }).catch((e) => {
         Agricultor.findByCredentials(body.email, body.login, body.senha).then((agricultor) => {
             if (!agricultor) {
-                return res.status(404).send();
+                return res.status(401).send();
             }
-            
+
             return agricultor.generateAuthToken().then((token) => {
-                res.header('x-auth', token).send(agricultor);
+
+                const data = {
+                    userType: 'agricultor',
+                    _id: agricultor._id,
+                    bloqueado: agricultor.bloqueado,
+                    email: agricultor.email,
+                    nomeCompleto: agricultor.nomeCompleto,
+                    token: agricultor.tokens[agricultor.tokens.length-1].token
+                }
+
+                res.header('x-auth', token).send(data);
             });
         }).catch((e) => {
-            console.log(e);
-            return res.status(404).send();
+            console.log("Error", e);
+            return res.status(401).send({ cod: "SUCCESS_SEGUINDO", e: e });
         });
     });
 });

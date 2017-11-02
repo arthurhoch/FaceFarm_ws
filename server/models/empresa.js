@@ -104,7 +104,9 @@ EmpresaSchema.statics.findByCredentials = function(email, login, senha) {
     }
 
 
-    return Empresa.findOne(data).then((empresa) => {
+    return Empresa.findOne(data, {login: 0}).then((empresa) => {
+
+
         if (!empresa) {
             return Promise.reject();
         }

@@ -84,7 +84,8 @@ AgricultorSchema.statics.findByToken = function (token) {
     try {
         decoded = jwt.verify(token, cert, { algorithms: ['RS256'] });
     } catch (e) {
-        return Promise.reject();
+        console.log(e);
+        return Promise.reject(e);
     }
 
     return Agricultor.findOne({

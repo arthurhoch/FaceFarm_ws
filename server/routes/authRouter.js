@@ -62,13 +62,12 @@ authRouter.route('/users').post((req, res) => {
                     bloqueado: agricultor.bloqueado,
                     email: agricultor.email,
                     nomeCompleto: agricultor.nomeCompleto,
-                    token: agricultor.tokens[agricultor.tokens.length-1].token
+                    jwt: agricultor.tokens[agricultor.tokens.length - 1].token
                 }
-
                 res.header('x-auth', token).send(data);
             });
         }).catch((e) => {
-            console.log("Error", e);
+            console.log(e);
             return res.status(401).send({ cod: "SUCCESS_SEGUINDO", e: e });
         });
     });

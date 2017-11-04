@@ -62,7 +62,7 @@ authRouter.route('/users').post((req, res) => {
                     bloqueado: agricultor.bloqueado,
                     email: agricultor.email,
                     nomeCompleto: agricultor.nomeCompleto,
-                    jwt: agricultor.tokens[agricultor.tokens.length - 1].token
+                    jwt: agricultor.tokens[agricultor.tokens.length-1].token
                 }
                 res.header('x-auth', token).send(data);
             });

@@ -23,11 +23,13 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
     "express": "^4.15.4",
     "jsonwebtoken": "^7.4.2",
     "lodash": "^4.17.4",
     "mongodb": "^2.2.31",
     "mongoose": "^4.11.7",
+    "mongoose-id-validator": "^0.4.3",
     "request": "^2.81.0",
     "require-dir": "^0.3.2",
     "validator": "^8.0.0"

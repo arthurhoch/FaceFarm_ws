@@ -95,7 +95,7 @@ ModeradorSchema.statics.findByCredentials = function(email, login, senha) {
     return Moderador.findOne(data).then((moderador) => {
 
         if (!moderador) {
-            return Promise.reject();
+            return Promise.reject('Usuário não encontrado');
         }
 
         return new Promise((resolve, reject) => {

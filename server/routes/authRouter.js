@@ -15,7 +15,7 @@ authRouter.route('/admins').post((req, res) => {
     Moderador.findByCredentials(body.email, body.login, body.senha).then((moderador) => {
 
         if (!moderador) {
-            return res.status(401).send();
+            return res.status(401).send({ cod: 'INFO_USUARIO_NAO_ENCONTRADO' });
         }
 
         return moderador.generateAuthToken().then((token) => {
@@ -24,7 +24,7 @@ authRouter.route('/admins').post((req, res) => {
     }).catch((e) => {
         Gerente.findByCredentials(body.email, body.login, body.senha).then((gerente) => {
             if (!gerente) {
-                return res.status(401).send();
+                return res.status(401).send({ cod: 'INFO_USUARIO_NAO_ENCONTRADO' });
             }
 
             return gerente.generateAuthToken().then((token) => {
@@ -32,7 +32,7 @@ authRouter.route('/admins').post((req, res) => {
             });
         }).catch((e) => {
             console.log(e);
-            return res.status(401).send();
+            return res.status(401).send({ cod: "INFO_CREDENCIAIS_INCORRETAS", e: e });
         });
     });
 });
@@ -42,7 +42,7 @@ authRouter.route('/users').post((req, res) => {
 
     Empresa.findByCredentials(body.email, body.login, body.senha).then((empresa) => {
         if (!empresa) {
-            return res.status(401).send();
+            return res.status(401).send({ cod: 'INFO_USUARIO_NAO_ENCONTRADO' });
         }
 
         return empresa.generateAuthToken().then((token) => {
@@ -51,7 +51,7 @@ authRouter.route('/users').post((req, res) => {
     }).catch((e) => {
         Agricultor.findByCredentials(body.email, body.login, body.senha).then((agricultor) => {
             if (!agricultor) {
-                return res.status(401).send();
+                return res.status(401).send({ cod: 'INFO_USUARIO_NAO_ENCONTRADO' });
             }
 
             return agricultor.generateAuthToken().then((token) => {
@@ -68,7 +68,7 @@ authRouter.route('/users').post((req, res) => {
             });
         }).catch((e) => {
             console.log(e);
-            return res.status(401).send({ cod: "SUCCESS_SEGUINDO", e: e });
+            return res.status(401).send({ cod: "INFO_CREDENCIAIS_INCORRETAS", e: e });
         });
     });
 });

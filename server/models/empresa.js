@@ -108,7 +108,7 @@ EmpresaSchema.statics.findByCredentials = function(email, login, senha) {
 
 
         if (!empresa) {
-            return Promise.reject();
+            return Promise.reject('Usuário não encontrado');
         }
 
         return new Promise((resolve, reject) => {

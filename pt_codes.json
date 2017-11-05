@@ -1,9 +1,4 @@
 {
-    "INFO_JA_ESTA_SEGUINDO": {
-        "TYPE": "INFO",
-        "COD": "INFO_JA_ESTA_SEGUINDO",
-        "MSG": "Você já está seguindo esse usuário."
-    },
     "SUCCESS_SEGUINDO": {
         "TYPE": "SUCCESS",
         "COD": "SUCCESS_SEGUINDO",
@@ -73,6 +68,11 @@
         "TYPE": "INFO",
         "COD": "INFO_USUARIO_NAO_AUTORIZADO",
         "MSG": "Você não está autorizado a acessar esta rota"
+    },
+    "INFO_CREDENCIAIS_INCORRETAS": {
+        "TYPE": "INFO",
+        "COD": "INFO_INCORRECT_CREDENTIALS",
+        "MSG": "E-mail ou senha incorretos!"
     },
     "SUCCESS_UNFOLLOW": {
         "TYPE": "SUCCESS",

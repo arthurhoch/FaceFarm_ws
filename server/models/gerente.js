@@ -88,7 +88,7 @@ GerenteSchema.statics.findByCredentials = function(email, login, senha) {
     return Gerente.findOne(data).then((gerente) => {
         
         if (!gerente) {
-            return Promise.reject();
+            return Promise.reject('Usuário não encontrado');
         }
 
         return new Promise((resolve, reject) => {

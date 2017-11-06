@@ -117,7 +117,7 @@ AgricultorSchema.statics.findByCredentials = function (email, login, senha) {
     return Agricultor.findOne(data, query).then((agricultor) => {
 
         if (!agricultor) {
-            return Promise.reject('Usuário não encontrado');
+            return Promise.reject(agricultor);
         }
 
         return new Promise((resolve, reject) => {

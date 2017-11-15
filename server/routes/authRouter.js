@@ -46,7 +46,7 @@ authRouter.route('/users').post((req, res) => {
         }
 
         return empresa.generateAuthToken().then((token) => {
-            res.header('x-auth', token).send(empresa);
+            res.header('x-auth', token).send({token});
         });
     }).catch((e) => {
         Agricultor.findByCredentials(body.email, body.login, body.senha).then((agricultor) => {
@@ -55,17 +55,6 @@ authRouter.route('/users').post((req, res) => {
             }
 
             return agricultor.generateAuthToken().then((token) => {
-
-                const data = {
-                    userType: 'agricultor',
-                    _id: agricultor._id,
-                    bloqueado: agricultor.bloqueado,
-                    email: agricultor.email,
-                    nomeCompleto: agricultor.nomeCompleto,
-                    jwt: agricultor.tokens[agricultor.tokens.length-1].token
-                }
-
-                console.log('token', token)
                 res.header('x-auth', token).send({token});
             });
         }).catch((e) => {

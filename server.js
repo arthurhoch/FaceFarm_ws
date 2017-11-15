@@ -50,7 +50,7 @@ app.use(function (req, res, next) {
 */
 
 app.use(function (req, res, next) {
-    console.log(req.body);
+    // console.log(req.body);
     next();
 });
 

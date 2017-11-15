@@ -53,8 +53,13 @@ EmpresaSchema.methods.generateAuthToken = function() {
 
     var cert = fs.readFileSync('server/keys/empresa.private_key.pem');
     var access = 'auth';
-    var token = jwt.sign({ _id: Empresa._id.toHexString(), access },
-        cert, { algorithm: 'RS256' });
+    var token = jwt.sign({
+        access,
+        _id: Empresa._id.toHexString(),
+        nomeCompleto: Empresa.nomeCompleto,
+        imagemPerfil: Empresa.imagemPerfil,
+        userType: 'empresa',
+    }, cert, { algorithm: 'RS256' });
 
     let tokenAuth = Empresa.tokens.filter((t) => {
         if (t.access === 'auth') {

@@ -64,7 +64,9 @@ authRouter.route('/users').post((req, res) => {
                     nomeCompleto: agricultor.nomeCompleto,
                     jwt: agricultor.tokens[agricultor.tokens.length-1].token
                 }
-                res.header('x-auth', token).send(data);
+
+                console.log('token', token)
+                res.header('x-auth', token).send({token});
             });
         }).catch((e) => {
             console.log(e);

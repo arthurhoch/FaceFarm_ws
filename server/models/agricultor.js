@@ -54,8 +54,13 @@ AgricultorSchema.methods.generateAuthToken = function () {
 
     var cert = fs.readFileSync('server/keys/agricultor.private_key.pem');
     var access = 'auth';
-    var token = jwt.sign({ _id: Agricultor._id.toHexString(), access },
-        cert, { algorithm: 'RS256' });
+    var token = jwt.sign({ 
+        access,
+        _id: Agricultor._id.toHexString(), 
+        nomeCompleto: Agricultor.nomeCompleto,
+        imagemPerfil: Agricultor.imagemPerfil,
+        userType: 'agricultor',
+    }, cert, { algorithm: 'RS256' });
 
     let tokenAuth = Agricultor.tokens.filter((t) => {
         if (t.access === 'auth') {

@@ -3,13 +3,22 @@ const mongoose = require('mongoose');
 const idvalidator = require('mongoose-id-validator');
 
 const PostagemSchema = new mongoose.Schema({
-    texto: { type: String, required: true },
+    texto: { type: String },
     curtidas: { type: Number },
     data: {    type: Date, default: Date.now },
     preco: { type: Number },
     quantidadeTotal: { type: Number },
+    tipo: { type: String, required: true },
     quantidadeMedida: { type: Number },
-    unidadeMedida: { type: Number },
+    unidadeMedida: { type: String },
+    agricultor: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Agricultor'
+    },
+    empresa: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Empresa'
+    },
     listaComentario: [{
         type: mongoose.Schema.ObjectId,
         ref: 'Comentario'

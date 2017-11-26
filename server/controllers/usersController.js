@@ -29,6 +29,29 @@ const searchUserByName = (req, res) => {
         })
 };
 
+const getUserById = (req, res) => {
+    const userId = req.params.id;
+
+    Agricultor.findById(userId)
+        .select('nomeCompleto _id')
+        .then((agricultor) => {
+            console.log('agricultor: ', agricultor)
+            if (agricultor) {
+                return res.send({ agricultor })
+            } else {
+                Empresa.findById(userId)
+                    .select('nomeCompleto _id')
+                    .then((empresa) => {
+                        return res.send({ empresa })
+                    }).catch((e) => {
+                        return res.status(400).send(e)
+                    });
+            }
+        }).catch((e) => {
+            return res.status(400).send(e)
+        })
+};
+
 const count = (req, res) => {
     Agricultor.count({})
         .then((counter) => {
@@ -55,6 +78,7 @@ const getById = (req, res) => {
 
 module.exports = {
     searchUserByName,
+    getUserById,
     count,
     getById
 };

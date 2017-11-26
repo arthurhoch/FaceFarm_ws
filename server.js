@@ -31,6 +31,7 @@ const { tipoPostagemRouter } = require('./server/routes/tipoPostagemRouter');
 const { weatherRouter } = require('./server/routes/weatherRouter');
 const { currencyRouter } = require('./server/routes/currencyRouter');
 const { authRouter } = require('./server/routes/authRouter');
+const { usersRouter } = require('./server/routes/usersRouter');
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -82,6 +83,7 @@ app.use('/tipoPostagem', tipoPostagemRouter);
 app.use('/weather', weatherRouter);
 app.use('/currency', currencyRouter);
 app.use('/auth', authRouter);
+app.use('/users', usersRouter);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server listen on port ${process.env.PORT}`);

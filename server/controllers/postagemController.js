@@ -91,7 +91,6 @@ const getListByUsers = (req, res) => {
 
 
 	const body = _.pick(req.body, ['usersIds']);
-	console.log(body)
 	if (body.usersIds) {
 		const usersIds = body.usersIds.filter((item) => {
 			if (!ObjectID.isValid(item)) {
@@ -105,7 +104,6 @@ const getListByUsers = (req, res) => {
 			{ path: 'empresa', select: 'nomeCompleto' }
 		];
 
-		// 'agricultor': { $in: [ usersIds ] }
 		Postagem.find({ $or: [{ 'agricultor': { $in: [usersIds] } }, { 'empresa': { $in: [usersIds] } }] })
 			.populate(populateQuery)
 			.sort('-data')

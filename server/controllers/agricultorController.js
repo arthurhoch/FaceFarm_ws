@@ -156,9 +156,9 @@ const unfollow = (req, res) => {
             Following.unfollowUser(agricultorId, id_seguindo, 'followingListEmpresa').then((following) => {
                 Followers.removeFollower(id_seguindo, agricultorId, 'followersListAgricultor').then((follower) => {
                     if (follower) {
-                        return res.send({ cod: "SUCCESS_UNFOLLOW"});
+                        return res.send({ cod: "SUCCESS_UNFOLLOW" });
                     }
-                    return res.send({ cod: "INFO_USUARIO_NAO_ENCONTRADO"});
+                    return res.send({ cod: "INFO_USUARIO_NAO_ENCONTRADO" });
                 }).catch((e) => { return res.status(400).send({ cod: "ERROR_UNFOLLOW", e }) });
             }).catch((e) => {
                 console.log(e)
@@ -170,16 +170,16 @@ const unfollow = (req, res) => {
                 Following.unfollowUser(agricultorId, id_seguindo, 'followingListAgricultor').then((following) => {
                     Followers.removeFollower(id_seguindo, agricultorId, 'followersListEmpresa').then((follower) => {
                         if (follower) {
-                            return res.send({ cod: "SUCCESS_UNFOLLOW"});
+                            return res.send({ cod: "SUCCESS_UNFOLLOW" });
                         }
-                        return res.send({ cod: "INFO_USUARIO_NAO_ENCONTRADO"});
+                        return res.send({ cod: "INFO_USUARIO_NAO_ENCONTRADO" });
                     }).catch((e) => { return res.status(400).send({ cod: "ERROR_UNFOLLOW" + e }), e });
                 }).catch((e) => {
                     return res.status(400).send({ cod: "ERROR_UNFOLLOW" }, e)
                 });
             }
-        }).catch((e) => { return res.status(404).send({ cod: 'ERROR_PROCURAR_USUARIO' }),e });
-    }).catch((e) => { return res.status(400).send({ cod: 'ERROR_PROCURAR_USUARIO' }),e });
+        }).catch((e) => { return res.status(404).send({ cod: 'ERROR_PROCURAR_USUARIO' }), e });
+    }).catch((e) => { return res.status(400).send({ cod: 'ERROR_PROCURAR_USUARIO' }), e });
 }
 
 const getListFollowing = (req, res) => {

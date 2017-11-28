@@ -7,12 +7,12 @@ const { Following } = require('../models/following');
 const { ObjectID } = require('mongodb')
 
 const create = (req, res) => {
-	var body = _.pick(req.body, ['login', 'senha', 'nomeCompleto', 'cnpj',
-	'email', 'telefone', 'whattsapp', 'bloqueado', 'visitas', 'sexo',
-	'imagemPerfil', 'dataCriacaoConta', 'dataAberturaEmpresa', 'hashConfirmacao',
-	'configuracao', 'listaDenunciaUsuario', 'listaCultura', 'listaPostage',
-	'listaComentarios', 'listaImagen', 'listaCidade', 'listaBanimento',
-	'listaNotificacao']);
+    var body = _.pick(req.body, ['login', 'senha', 'nomeCompleto', 'cnpj',
+        'email', 'telefone', 'whattsapp', 'bloqueado', 'visitas', 'sexo',
+        'imagemPerfil', 'dataCriacaoConta', 'dataAberturaEmpresa', 'hashConfirmacao',
+        'configuracao', 'listaDenunciaUsuario', 'listaCultura', 'listaPostage',
+        'listaComentarios', 'listaImagen', 'listaCidade', 'listaBanimento',
+        'listaNotificacao']);
 
     var empresa = new Empresa(body)
 
@@ -24,76 +24,76 @@ const create = (req, res) => {
 };
 
 const remove = (req, res) => {
-	var id = req.params.id
+    var id = req.params.id
 
-	if (!ObjectID.isValid(id)) {
-		return res.status(404).send()
-	}
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send()
+    }
 
-	Empresa.findByIdAndRemove(id).then((empresa) => {
-		if (!empresa) {
-			return res.status(404).send()
-		}
-		return res.send({empresa})
-	}).catch((e) => res.status(400).send())
+    Empresa.findByIdAndRemove(id).then((empresa) => {
+        if (!empresa) {
+            return res.status(404).send()
+        }
+        return res.send({ empresa })
+    }).catch((e) => res.status(400).send())
 };
 
 const update = (req, res) => {
-	var body = _.pick(req.body, ['login', 'senha', 'nomeCompleto', 'cnpj',
-	'email', 'telefone', 'whattsapp', 'bloqueado', 'visitas', 'sexo',
-	'imagemPerfil', 'dataCriacaoConta', 'dataAberturaEmpresa', 'hashConfirmacao',
-	'configuracao', 'listaDenunciaUsuario', 'listaCultura', 'listaPostage',
-	'listaComentarios', 'listaImagen', 'listaCidade', 'listaBanimento',
-	'listaNotificacao']);
+    var body = _.pick(req.body, ['login', 'senha', 'nomeCompleto', 'cnpj',
+        'email', 'telefone', 'whattsapp', 'bloqueado', 'visitas', 'sexo',
+        'imagemPerfil', 'dataCriacaoConta', 'dataAberturaEmpresa', 'hashConfirmacao',
+        'configuracao', 'listaDenunciaUsuario', 'listaCultura', 'listaPostage',
+        'listaComentarios', 'listaImagen', 'listaCidade', 'listaBanimento',
+        'listaNotificacao']);
 
-	var empresa = new Empresa(body)
+    var empresa = new Empresa(body)
 
-	id = empresa._id;
-	
-	if (!ObjectID.isValid(id)) {
-		return res.status(404).send()
-	}
+    id = empresa._id;
 
-	Empresa.findByIdAndUpdate(id, {$set: empresa}, {new: true}).then((empresaEdited) => {
-		if (!empresaEdited) {
-			return res.status(404).send()
-		}
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send()
+    }
 
-		return res.send({empresaEdited})
-	}).catch((e) => {
-		return res.status(400).send()
-	});
+    Empresa.findByIdAndUpdate(id, { $set: empresa }, { new: true }).then((empresaEdited) => {
+        if (!empresaEdited) {
+            return res.status(404).send()
+        }
+
+        return res.send({ empresaEdited })
+    }).catch((e) => {
+        return res.status(400).send()
+    });
 };
 
 const getList = (req, res) => {
-	Empresa.find().then((empresaList) => {
-		return res.send({empresaList})
-	}), (e) => {
-		return res.status(400).send(e)
-	}
+    Empresa.find().then((empresaList) => {
+        return res.send({ empresaList })
+    }), (e) => {
+        return res.status(400).send(e)
+    }
 };
 
 const count = (req, res) => {
-	Empresa.count({})
-	.then((counter) => {
-		return res.send({counter})
-	}), (e) => {
-		return res.status(400).send(e)
-	}
+    Empresa.count({})
+        .then((counter) => {
+            return res.send({ counter })
+        }), (e) => {
+            return res.status(400).send(e)
+        }
 };
 
 const getById = (req, res) => {
-	var id = req.params.id
-	if (!ObjectID.isValid(id)) {
-		return res.status(404).send()
-	}
+    var id = req.params.id
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send()
+    }
 
-	Empresa.findById(id).then((empresa) => {
-		if (!empresa) {
-			return res.status(404).send()		
-		}
-		return res.send({empresa})
-	}).catch((e) => res.status(400).send())
+    Empresa.findById(id).then((empresa) => {
+        if (!empresa) {
+            return res.status(404).send()
+        }
+        return res.send({ empresa })
+    }).catch((e) => res.status(400).send())
 };
 
 const follow = (req, res) => {
@@ -151,9 +151,9 @@ const unfollow = (req, res) => {
             Following.unfollowUser(empresaId, id_seguindo, 'followingListEmpresa').then((following) => {
                 Followers.removeFollower(id_seguindo, empresaId, 'followersListAgricultor').then((follower) => {
                     if (follower) {
-                        return res.send({ cod: "SUCCESS_UNFOLLOW"});
+                        return res.send({ cod: "SUCCESS_UNFOLLOW" });
                     }
-                    return res.send({ cod: "INFO_USUARIO_NAO_ENCONTRADO"});
+                    return res.send({ cod: "INFO_USUARIO_NAO_ENCONTRADO" });
                 }).catch((e) => { return res.status(400).send({ cod: "ERROR_UNFOLLOW" + e }) });
             }).catch((e) => {
                 console.log(e)
@@ -165,9 +165,9 @@ const unfollow = (req, res) => {
                 Following.unfollowUser(empresaId, id_seguindo, 'followingListAgricultor').then((following) => {
                     Followers.removeFollower(id_seguindo, empresaId, 'followersListEmpresa').then((follower) => {
                         if (follower) {
-                            return res.send({ cod: "SUCCESS_UNFOLLOW"});
+                            return res.send({ cod: "SUCCESS_UNFOLLOW" });
                         }
-                        return res.send({ cod: "INFO_USUARIO_NAO_ENCONTRADO"});
+                        return res.send({ cod: "INFO_USUARIO_NAO_ENCONTRADO" });
                     }).catch((e) => { return res.status(400).send({ cod: "ERROR_UNFOLLOW" + e }) });
                 }).catch((e) => {
                     return res.status(400).send({ cod: "ERROR_UNFOLLOW" + e })
@@ -202,13 +202,13 @@ const getListFollowers = (req, res) => {
 
 module.exports = {
     create,
-	remove,
-	update,
-	getList,
-	count,
-	getById,
-	follow,
-	unfollow,
+    remove,
+    update,
+    getList,
+    count,
+    getById,
+    follow,
+    unfollow,
     getListFollowers,
     getListFollowing
 };

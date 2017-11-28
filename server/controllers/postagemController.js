@@ -104,7 +104,7 @@ const getListByUsers = (req, res) => {
 			{ path: 'empresa', select: 'nomeCompleto' }
 		];
 
-		Postagem.find({ $or: [{ 'agricultor': { $in: [usersIds] } }, { 'empresa': { $in: [usersIds] } }] })
+		Postagem.find({ $or: [{ agricultor: { $in: usersIds } }, { empresa: { $in: usersIds } }] })
 			.populate(populateQuery)
 			.sort('-data')
 			.exec().then((posts) => {

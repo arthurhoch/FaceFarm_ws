@@ -5,7 +5,7 @@ const { ObjectID } = require('mongodb')
 
 const create = (req, res) => {
 	var body = _.pick(req.body, ['idUsuario', 'texto', 'curtidas', 'data', 'preco', 'quantidadeTotal', 'tipo',
-		'quantidadeMedida', 'unidadeMedida', 'listaComentario', 'listaCultura', 'listaImagen']);
+		'quantidadeMedida', 'unidadeMedida', 'listaComentario', 'listaCultura', 'listaImagen', 'cultura']);
 
 	console.log('req.userType', req.userType)
 	var postagem = new Postagem(body)
@@ -35,7 +35,7 @@ const remove = (req, res) => {
 
 const update = (req, res) => {
 	var body = _.pick(req.body, ['texto', 'curtidas', 'data', 'preco', 'quantidadeTotal',
-		'quantidadeMedida', 'unidadeMedida', 'listaComentario', 'listaCultura', 'listaImagen']);
+		'quantidadeMedida', 'unidadeMedida', 'listaComentario', 'listaCultura', 'listaImagen', 'cultura']);
 
 	var postagem = new Postagem(body)
 

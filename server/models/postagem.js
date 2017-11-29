@@ -11,6 +11,7 @@ const PostagemSchema = new mongoose.Schema({
     tipo: { type: String, required: true },
     quantidadeMedida: { type: Number },
     unidadeMedida: { type: String },
+    cultura: { type: String},
     agricultor: {
         type: mongoose.Schema.ObjectId,
         ref: 'Agricultor'
@@ -19,14 +20,6 @@ const PostagemSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'Empresa'
     },
-    listaComentario: [{
-        type: mongoose.Schema.ObjectId,
-        ref: 'Comentario'
-    }],
-    listaCultura: [{
-        type: mongoose.Schema.ObjectId,
-        ref: 'Cultura'
-    }],
     listaImagen: [{
         type: mongoose.Schema.ObjectId,
         ref: 'Imagem'

@@ -5,17 +5,29 @@ const idvalidator = require('mongoose-id-validator');
 const ComentarioSchema = new mongoose.Schema({
     texto: { type: String, required: true },
     curtidas: { type: Number },
-    data: {    type: Date, default: Date.now },
+    data: { type: Date, default: Date.now },
     listaComentario: [{
         type: mongoose.Schema.ObjectId,
         ref: 'Comentario'
     }],
+    agricultor: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Agricultor'
+    },
+    empresa: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Empresa'
+    }, 
+    postagem: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Postagem'
+    }
 });
 
 ComentarioSchema.methods.addComentario = function (id_comentario_pai, id_comentario_filho) {
     var Comentario = this;
 
-    let update = { '$push' : { listaComentario: id_comentario_filho } };
+    let update = { '$push': { listaComentario: id_comentario_filho } };
     let options = { upsert: true, new: true };
 
     return Comentario.findByIdAndUpdate(id_comentario_pai, update, options);
@@ -24,12 +36,12 @@ ComentarioSchema.methods.addComentario = function (id_comentario_pai, id_comenta
 ComentarioSchema.methods.exist = function (_id) {
     var Comentario = this;
 
-    return new Promise( (resolve, reject) => {
-        Comentario.findOne({_id}).then( (comentario) => {
+    return new Promise((resolve, reject) => {
+        Comentario.findOne({ _id }).then((comentario) => {
             if (!comentario)
                 reject(comentario);
             resolve(comentario);
-        }).catch( (err) => {
+        }).catch((err) => {
             reject(err);
         });
     });

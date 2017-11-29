@@ -54,9 +54,9 @@ AgricultorSchema.methods.generateAuthToken = function () {
 
     var cert = fs.readFileSync('server/keys/agricultor.private_key.pem');
     var access = 'auth';
-    var token = jwt.sign({ 
+    var token = jwt.sign({
         access,
-        _id: Agricultor._id.toHexString(), 
+        _id: Agricultor._id.toHexString(),
         nomeCompleto: Agricultor.nomeCompleto,
         imagemPerfil: Agricultor.imagemPerfil,
         userType: 'agricultor',
@@ -116,6 +116,7 @@ AgricultorSchema.statics.findByCredentials = function (email, login, senha) {
         email: 1,
         nomeCompleto: 1,
         tokens: 1,
+        imagemPerfil: 1,
         senha: 1
     }
 

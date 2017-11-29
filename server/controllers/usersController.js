@@ -1,10 +1,14 @@
 const _ = require('lodash');
+const fs = require('fs');
+const path = require('path');
 
 const { Agricultor } = require('../models/agricultor');
 const { Empresa } = require('../models/empresa');
 const { Followers } = require('../models/followers');
 const { Following } = require('../models/following');
 const { ObjectID } = require('mongodb')
+
+const formidable = require('formidable')
 
 
 const searchUserByName = (req, res) => {
@@ -14,23 +18,25 @@ const searchUserByName = (req, res) => {
 
     let searchResult = [];
     Agricultor.find({ 'nomeCompleto': { '$regex': searchParam } })
-        .select('nomeCompleto _id')
+        .select('nomeCompleto _id imagemPerfil')
         .then((agricultorList) => {
             agricultorList = agricultorList.map((item) => {
                 return {
                     _id: item._id,
                     nomeCompleto: item.nomeCompleto,
-                    userType: 'agricultor'
+                    userType: 'agricultor',
+                    imagemPerfil: item.imagemPerfil
                 };
             })
             Empresa.find({ 'nomeCompleto': { '$regex': searchParam } })
-                .select('nomeCompleto _id')
+                .select('nomeCompleto _id imagemPerfil')
                 .then((empresaList) => {
                     empresaList = empresaList.map((item) => {
                         return {
                             _id: item._id,
                             nomeCompleto: item.nomeCompleto,
-                            userType: 'empresa'
+                            userType: 'empresa',
+                            imagemPerfil: item.imagemPerfil
                         };
                     })
                     searchResult = agricultorList.concat(empresaList);
@@ -47,14 +53,14 @@ const getUserById = (req, res) => {
     const userId = req.params.id;
 
     Agricultor.findById(userId)
-        .select('nomeCompleto _id')
+        .select('nomeCompleto _id imagemPerfil')
         .then((agricultor) => {
             console.log('agricultor: ', agricultor)
             if (agricultor) {
                 return res.send({ agricultor })
             } else {
                 Empresa.findById(userId)
-                    .select('nomeCompleto _id')
+                    .select('nomeCompleto _id imagemPerfil')
                     .then((empresa) => {
                         return res.send({ empresa })
                     }).catch((e) => {
@@ -175,10 +181,10 @@ const unfollow = (req, res) => {
 const getListFollowing = (req, res) => {
     let body = _.pick(req.body, ['id']);
     let id = body.id ? req.params.id : req.user._id;
-    
+
     Following.findById(id)
-        .populate('followingListAgricultor', 'nomeCompleto')
-        .populate('followingListEmpresa', 'nomeCompleto')
+        .populate('followingListAgricultor', 'nomeCompleto imagemPerfil')
+        .populate('followingListEmpresa', 'nomeCompleto imagemPerfil')
         .exec().then((response) => {
             let listFollowing = [];
             if (response) {
@@ -190,7 +196,7 @@ const getListFollowing = (req, res) => {
                     listFollowing = response.followingListEmpresa;
                 }
             }
-            return res.send({listFollowing});
+            return res.send({ listFollowing });
         }).catch((e) => res.status(400).send({ cod: 'ERROR_OBTER_LISTA_SEGUINDO' }, e));
 };
 
@@ -199,8 +205,8 @@ const getListFollowers = (req, res) => {
     let id = body.id ? req.params.id : req.user._id;
 
     Followers.findById(id)
-        .populate('followersListAgricultor', 'nomeCompleto')
-        .populate('followersListEmpresa', 'nomeCompleto')
+        .populate('followersListAgricultor', 'nomeCompleto imagemPerfil')
+        .populate('followersListEmpresa', 'nomeCompleto imagemPerfil')
         .exec().then((response) => {
             let listFollowers = [];
             if (response) {
@@ -212,10 +218,57 @@ const getListFollowers = (req, res) => {
                     listFollowers = response.followersListEmpresa;
                 }
             }
-            return res.send({listFollowers});
+            return res.send({ listFollowers });
         }).catch((e) => res.status(400).send({ cod: 'ERROR_OBTER_LISTA_SEGUINDO' }, e));
 };
 
+
+
+const changeProfilePicture = (req, res) => {
+    const userId = req.user._id;
+
+    const rootDir = process.cwd();
+    const usersImagesDir = path.join(rootDir, 'public', 'images', 'users');
+    const userImagesDir = path.join(usersImagesDir, userId.toString());
+
+    if (!fs.existsSync(userImagesDir)) {
+        fs.mkdir(userImagesDir)
+    }
+    var form = new formidable.IncomingForm();
+
+    form.on('fileBegin', function (name, file) {
+        file.path = path.join(userImagesDir, 'profile.jpg');
+    })
+
+    form.parse(req, function (err, fields, files) {
+
+        if (err) {
+            console.log('erro ao salvar arquivo.')
+            res.status(400).send({ cod: 'ERROR_OBTER_LISTA_SEGUINDO' }, err)
+        } else {
+            req.user.imagemPerfil = `/images/users/${userId}/profile.jpg`;
+            if (req.userType === 'agricultor') {
+                var agricultor = new Agricultor(req.user)
+                id = agricultor._id;
+                if (!ObjectID.isValid(id)) {
+                    return res.status(404).send()
+                }
+
+                Agricultor.findByIdAndUpdate(id, { $set: agricultor }, { new: true })
+                    .then((agricultorEdited) => {
+                        if (!agricultorEdited) {
+                            return res.status(404).send()
+                        }
+
+                        console.log('File saved.')
+                        res.send({ sucesso: 'Arquivo gravado com sucesso' })
+                    }).catch((e) => {
+                        return res.status(400).send(e)
+                    });
+            }
+        }
+    });
+}
 
 module.exports = {
     searchUserByName,
@@ -225,5 +278,6 @@ module.exports = {
     follow,
     unfollow,
     getListFollowers,
-    getListFollowing
+    getListFollowing,
+    changeProfilePicture
 };

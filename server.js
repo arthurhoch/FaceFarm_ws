@@ -59,6 +59,8 @@ var cors = require('cors');
 
 app.use(cors());
 
+app.use(express.static(__dirname + '/public'));
+
 app.use('/agricultor', agricultorRouter);
 app.use('/anuncio', anuncioRouter);
 app.use('/banimento', banimentoRouter);

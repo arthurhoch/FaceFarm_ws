@@ -13,4 +13,6 @@ usersRouter.route('/me/unfollow').post(verifyUser, usersController.unfollow);
 usersRouter.route('/me/getListFollowing').post(verifyUser, usersController.getListFollowing);
 usersRouter.route('/me/getListFollowers').post(verifyUser, usersController.getListFollowers);
 
+usersRouter.route('/me/changeProfilePicture').post(verifyUser, usersController.changeProfilePicture);
+
 module.exports = { usersRouter };

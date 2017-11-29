@@ -100,8 +100,8 @@ const getListByUsers = (req, res) => {
 		});
 
 		var populateQuery = [
-			{ path: 'agricultor', select: 'nomeCompleto' },
-			{ path: 'empresa', select: 'nomeCompleto' }
+			{ path: 'agricultor', select: 'nomeCompleto imagemPerfil' },
+			{ path: 'empresa', select: 'nomeCompleto imagemPerfil' }
 		];
 
 		Postagem.find({ $or: [{ agricultor: { $in: usersIds } }, { empresa: { $in: usersIds } }] })

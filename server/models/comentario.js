@@ -6,21 +6,14 @@ const ComentarioSchema = new mongoose.Schema({
     texto: { type: String, required: true },
     curtidas: { type: Number },
     data: { type: Date, default: Date.now },
+    from: {type: mongoose.Schema.Types.ObjectId, ref: 'Postagem'},
     listaComentario: [{
         type: mongoose.Schema.ObjectId,
         ref: 'Comentario'
     }],
-    agricultor: {
+    idUsuario: {
         type: mongoose.Schema.ObjectId,
         ref: 'Agricultor'
-    },
-    empresa: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Empresa'
-    }, 
-    postagem: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Postagem'
     }
 });
 

@@ -9,7 +9,6 @@ const postagemRouter = express.Router();
 
 postagemRouter.route('/').post(verifyUser, postagemController.create);
 postagemRouter.route('/:id').delete(postagemController.remove);
-postagemRouter.route('/').patch(postagemController.update);
 postagemRouter.route('/:id').get(postagemController.getById);
 postagemRouter.route('/getListByUsers').post(verifyUser, postagemController.getListByUsers);
 postagemRouter.route('/:skip/:limit').get(postagemController.getList);

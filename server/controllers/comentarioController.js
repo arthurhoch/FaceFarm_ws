@@ -5,29 +5,28 @@ const { Postagem } = require('../models/postagem')
 const { ObjectID } = require('mongodb')
 
 
-const save = (body, req, res) => {
-	var comentario = new Comentario(body)
+const create = (req, res) => {
+	var body = _.pick(req.body, ['from']);
+	var comentarioBody = _.pick(req.body, ['texto', 'from', 'idUsuario']);
+
+	var comentario = new Comentario(comentarioBody)
 
 	comentario.save().then((doc) => {
-        return res.send(doc)
-    }, (e) => {
-        return res.status(400).send(e)
-    })
-}
 
-const create = (req, res) => {
-	var body = _.pick(req.body, ['_id_pai']);
-	var comentarioBody = _.pick(req.body, ['texto']);
-
-	Postagem.exist(body._id_pai).then(() => {
-		save(comentarioBody, req, res);
-	}).catch(() => {
-		Comentario.exist(body._id_pai).then(() => {
-			save(comentarioBody, req, res);
-		}).catch(() => {
-			return res.status(500).send({cod: 'ERROR_POSTAGEM_NOT_EXIST'})
+		Postagem.update(
+			{ _id: comentarioBody.from },
+			{ $push: { comentarios: doc } }
+		).then( () => {
+			return res.send(doc)
+		}).catch((e) => {
+			return res.status(400).send(e)
+			
 		});
-	});
+
+	}, (e) => {
+		return res.status(400).send(e)
+	})
+
 };
 
 const remove = (req, res) => {
@@ -41,7 +40,7 @@ const remove = (req, res) => {
 		if (!comentario) {
 			return res.status(404).send()
 		}
-		return res.send({comentario})
+		return res.send({ comentario })
 	}).catch((e) => res.status(400).send())
 };
 
@@ -51,17 +50,17 @@ const update = (req, res) => {
 	var comentario = new Comentario(body)
 
 	id = comentario._id;
-	
+
 	if (!ObjectID.isValid(id)) {
 		return res.status(404).send()
 	}
 
-	Comentario.findByIdAndUpdate(id, {$set: comentario}, {new: true}).then((comentarioEdited) => {
+	Comentario.findByIdAndUpdate(id, { $set: comentario }, { new: true }).then((comentarioEdited) => {
 		if (!comentarioEdited) {
 			return res.status(404).send()
 		}
 
-		return res.send({comentarioEdited})
+		return res.send({ comentarioEdited })
 	}).catch((e) => {
 		return res.status(400).send()
 	});
@@ -69,7 +68,7 @@ const update = (req, res) => {
 
 const getList = (req, res) => {
 	Comentario.find().then((comentarioList) => {
-		return res.send({comentarioList})
+		return res.send({ comentarioList })
 	}), (e) => {
 		return res.status(400).send(e)
 	}
@@ -77,11 +76,11 @@ const getList = (req, res) => {
 
 const count = (req, res) => {
 	Comentario.count({})
-	.then((counter) => {
-		return res.send({counter})
-	}), (e) => {
-		return res.status(400).send(e)
-	}
+		.then((counter) => {
+			return res.send({ counter })
+		}), (e) => {
+			return res.status(400).send(e)
+		}
 };
 
 const getById = (req, res) => {
@@ -92,14 +91,14 @@ const getById = (req, res) => {
 
 	Comentario.findById(id).then((comentario) => {
 		if (!comentario) {
-			return res.status(404).send()		
+			return res.status(404).send()
 		}
-		return res.send({comentario})
+		return res.send({ comentario })
 	}).catch((e) => res.status(400).send())
 };
 
 module.exports = {
-    create,
+	create,
 	remove,
 	update,
 	getList,

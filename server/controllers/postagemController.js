@@ -2,20 +2,44 @@ const _ = require('lodash');
 
 const { Postagem } = require('../models/postagem');
 const { ObjectID } = require('mongodb')
+const { Comentario } = require('../models/comentario')
 
 const create = (req, res) => {
-	var body = _.pick(req.body, ['idUsuario', 'texto', 'curtidas', 'data', 'preco', 'quantidadeTotal', 'tipo',
-		'quantidadeMedida', 'unidadeMedida', 'listaComentario', 'listaCultura', 'listaImagen', 'cultura']);
+	var body = _.pick(req.body, ['_id', 'idUsuario', 'texto', 'curtidas', 'data', 'preco', 'quantidadeTotal', 'tipo',
+		'quantidadeMedida', 'unidadeMedida', 'listaComentario', 'listaCultura', 'listaImagen', 'cultura', 'finalizado']);
 
-	console.log('req.userType', req.userType)
-	var postagem = new Postagem(body)
-	postagem[req.userType] = req.user._id;
+	if (req.body.finalizado === true) {
+		console.log('update')
+		var postagem = new Postagem(body)
 
-	postagem.save().then((doc) => {
-		return res.send(doc)
-	}, (e) => {
-		return res.status(400).send(e)
-	})
+		id = postagem._id;
+
+		if (!ObjectID.isValid(id)) {
+			return res.status(404).send()
+		}
+
+		Postagem.findByIdAndUpdate(id, { $set: postagem }, { new: true }).then((postagemEdited) => {
+			if (!postagemEdited) {
+				return res.status(404).send()
+			}
+
+			return res.send({ postagemEdited })
+		}).catch((e) => {
+			return res.status(400).send()
+		});
+	} else {
+		console.log('req.userType', req.userType)
+		var postagem = new Postagem(body)
+		postagem[req.userType] = req.user._id;
+
+		postagem.save().then((doc) => {
+			return res.send(doc)
+		}, (e) => {
+			return res.status(400).send(e)
+		})
+	}
+
+
 };
 
 const remove = (req, res) => {
@@ -34,8 +58,9 @@ const remove = (req, res) => {
 };
 
 const update = (req, res) => {
+
 	var body = _.pick(req.body, ['texto', 'curtidas', 'data', 'preco', 'quantidadeTotal',
-		'quantidadeMedida', 'unidadeMedida', 'listaComentario', 'listaCultura', 'listaImagen', 'cultura']);
+		'quantidadeMedida', 'unidadeMedida', 'listaComentario', 'listaCultura', 'listaImagen', 'cultura', 'finalizado']);
 
 	var postagem = new Postagem(body)
 
@@ -89,7 +114,6 @@ const getById = (req, res) => {
 
 const getListByUsers = (req, res) => {
 
-
 	const body = _.pick(req.body, ['usersIds']);
 	if (body.usersIds) {
 		const usersIds = body.usersIds.filter((item) => {
@@ -101,14 +125,20 @@ const getListByUsers = (req, res) => {
 
 		var populateQuery = [
 			{ path: 'agricultor', select: 'nomeCompleto imagemPerfil' },
-			{ path: 'empresa', select: 'nomeCompleto imagemPerfil' }
 		];
 
 		Postagem.find({ $or: [{ agricultor: { $in: usersIds } }, { empresa: { $in: usersIds } }] })
 			.populate(populateQuery)
+			.populate('comentarios', 'texto')
 			.sort('-data')
 			.exec().then((posts) => {
+
+
+				console.log(posts);
+
 				return res.send({ posts });
+			
+
 			}).catch((e) => res.status(400).send({ cod: 'ERROR_LISTAR_POSTAGENS' }, e));
 	} else {
 		res.status(400).send({ cod: 'ERROR_LISTAR_POSTAGENS_IDS_NULL' });

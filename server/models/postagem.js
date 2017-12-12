@@ -12,10 +12,15 @@ const PostagemSchema = new mongoose.Schema({
     quantidadeMedida: { type: Number },
     unidadeMedida: { type: String },
     cultura: { type: String},
+    finalizado: { type: String, default: false},
     agricultor: {
         type: mongoose.Schema.ObjectId,
         ref: 'Agricultor'
     },
+    comentarios: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Comentario'
+    }],
     empresa: {
         type: mongoose.Schema.ObjectId,
         ref: 'Empresa'
